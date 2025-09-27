@@ -74,7 +74,8 @@ class _RollupState extends State<Rollup> {
   void didUpdateWidget(covariant Rollup oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
-      final RollupController oldController = _controller ?? oldWidget.controller!;
+      final RollupController oldController =
+          _controller ?? oldWidget.controller!;
       oldController.removeListener(_handleIsExpandedChanged);
       _controller?.dispose();
       _controller = null;
@@ -119,7 +120,11 @@ class RawRollup extends ImplicitlyAnimatedWidget {
     required this.isCollapsible,
     required this.onToggleExpanded,
     required this.semanticLabel,
-  }) : super(key: key, duration: const Duration(milliseconds: 250), curve: Curves.easeOut);
+  }) : super(
+         key: key,
+         duration: const Duration(milliseconds: 250),
+         curve: Curves.easeOut,
+       );
 
   final Widget heading;
   final WidgetBuilder childBuilder;
@@ -146,10 +151,20 @@ class _RawRollupState extends AnimatedWidgetBaseState<RawRollup> {
 
   @override
   void forEachTween(TweenVisitor<dynamic> visitor) {
-    _expansionTween = visitor(_expansionTween, widget.isExpanded ? 1.0 : 0.0,
-        (dynamic value) => Tween<double>(begin: value as double)) as Tween<double>?;
-    _arrowRotationTween = visitor(_arrowRotationTween, widget.isExpanded ? math.pi / 2 : 0.0,
-        (dynamic value) => Tween<double>(begin: value as double)) as Tween<double>?;
+    _expansionTween =
+        visitor(
+              _expansionTween,
+              widget.isExpanded ? 1.0 : 0.0,
+              (dynamic value) => Tween<double>(begin: value as double),
+            )
+            as Tween<double>?;
+    _arrowRotationTween =
+        visitor(
+              _arrowRotationTween,
+              widget.isExpanded ? math.pi / 2 : 0.0,
+              (dynamic value) => Tween<double>(begin: value as double),
+            )
+            as Tween<double>?;
   }
 
   @override
@@ -183,7 +198,8 @@ class _RawRollupState extends AnimatedWidgetBaseState<RawRollup> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Transform.rotate(
-                          angle: _arrowRotationTween?.evaluate(animation) ?? 0.0,
+                          angle:
+                              _arrowRotationTween?.evaluate(animation) ?? 0.0,
                           child: CustomPaint(
                             size: Size.square(_arrowWidth),
                             painter: _ArrowPainter(),
@@ -231,11 +247,8 @@ class _ActivateRollupAction extends ActivateAction {
 }
 
 class _RevealBox extends SingleChildRenderObjectWidget {
-  const _RevealBox({
-    Key? key,
-    required this.reveal,
-    required Widget? child,
-  }) : super(key: key, child: child);
+  const _RevealBox({Key? key, required this.reveal, required Widget? child})
+    : super(key: key, child: child);
 
   final double reveal;
 
@@ -245,7 +258,10 @@ class _RevealBox extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _RenderRevealBox renderObject) {
+  void updateRenderObject(
+    BuildContext context,
+    covariant _RenderRevealBox renderObject,
+  ) {
     renderObject..reveal = reveal;
   }
 }
@@ -290,19 +306,22 @@ class _RenderRevealBox extends RenderProxyBox {
     super.dispose();
   }
 
-  final LayerHandle<ClipRectLayer> _clipRectLayer = LayerHandle<ClipRectLayer>();
+  final LayerHandle<ClipRectLayer> _clipRectLayer =
+      LayerHandle<ClipRectLayer>();
 }
 
 class _ArrowPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = const Color(0xffc4c3bc)
-      ..style = PaintingStyle.fill;
-    final Path path = Path()
-      ..lineTo(7, 3.5)
-      ..lineTo(0, 7)
-      ..close();
+    final Paint paint =
+        Paint()
+          ..color = const Color(0xffc4c3bc)
+          ..style = PaintingStyle.fill;
+    final Path path =
+        Path()
+          ..lineTo(7, 3.5)
+          ..lineTo(0, 7)
+          ..close();
     canvas.drawPath(path, paint);
   }
 

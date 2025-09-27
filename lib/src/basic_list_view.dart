@@ -34,7 +34,8 @@ void main() {
             itemHeight: 20,
             itemBuilder: (BuildContext context, int index) {
               return Padding(
-                padding: EdgeInsets.only(left: index.toDouble()), child: Text('$index'),
+                padding: EdgeInsets.only(left: index.toDouble()),
+                child: Text('$index'),
               );
             },
           ),
@@ -50,15 +51,13 @@ typedef ListItemChildVisitor = void Function(RenderBox child, int index);
 
 typedef ListItemHost = void Function(ListItemVisitor visitor);
 
-typedef ListViewLayoutCallback = void Function({
-  required ListItemHost visitChildrenToRemove,
-  required ListItemHost visitChildrenToBuild,
-});
+typedef ListViewLayoutCallback =
+    void Function({
+      required ListItemHost visitChildrenToRemove,
+      required ListItemHost visitChildrenToBuild,
+    });
 
-typedef BasicListItemBuilder = Widget Function(
-  BuildContext context,
-  int index,
-);
+typedef BasicListItemBuilder = Widget Function(BuildContext context, int index);
 
 class BasicListView extends RenderObjectWidget {
   const BasicListView({
@@ -66,8 +65,8 @@ class BasicListView extends RenderObjectWidget {
     required this.length,
     required this.itemHeight,
     required this.itemBuilder,
-  })   : assert(length >= 0),
-        super(key: key);
+  }) : assert(length >= 0),
+       super(key: key);
 
   final int length;
   final double itemHeight;
@@ -79,15 +78,15 @@ class BasicListView extends RenderObjectWidget {
   @override
   @protected
   RenderBasicListView createRenderObject(BuildContext context) {
-    return RenderBasicListView(
-      itemHeight: itemHeight,
-      length: length,
-    );
+    return RenderBasicListView(itemHeight: itemHeight, length: length);
   }
 
   @override
   @protected
-  void updateRenderObject(BuildContext context, covariant RenderBasicListView renderObject) {
+  void updateRenderObject(
+    BuildContext context,
+    covariant RenderBasicListView renderObject,
+  ) {
     renderObject
       ..itemHeight = itemHeight
       ..length = length;
@@ -208,9 +207,8 @@ class ProxyListItemRange extends ListItemRange {
 }
 
 class UnionListItemRange extends ListItemRange {
-  UnionListItemRange([
-    List<ListItemRange> ranges = const <ListItemRange>[],
-  ]) : _ranges = List<ListItemRange>.from(ranges);
+  UnionListItemRange([List<ListItemRange> ranges = const <ListItemRange>[]])
+    : _ranges = List<ListItemRange>.from(ranges);
 
   final List<ListItemRange> _ranges;
 
@@ -266,7 +264,8 @@ mixin ListViewElementMixin on RenderObjectElement {
   Map<int, Element>? _children;
 
   @override
-  RenderBasicListView get renderObject => super.renderObject as RenderBasicListView;
+  RenderBasicListView get renderObject =>
+      super.renderObject as RenderBasicListView;
 
   @override
   @protected
@@ -295,7 +294,11 @@ mixin ListViewElementMixin on RenderObjectElement {
         assert(_children != null);
         assert(_children!.containsKey(index));
         final Element child = _children![index]!;
-        final Element? newChild = updateChild(child, null, null /* unused for remove */);
+        final Element? newChild = updateChild(
+          child,
+          null,
+          null /* unused for remove */,
+        );
         assert(newChild == null);
         _children!.remove(index);
       });
@@ -306,10 +309,13 @@ mixin ListViewElementMixin on RenderObjectElement {
           built = renderItem(index);
           assert(() {
             if (debugPaintListItemBuilds) {
-              debugCurrentListItemColor =
-                  debugCurrentListItemColor.withHue((debugCurrentListItemColor.hue + 2) % 360.0);
+              debugCurrentListItemColor = debugCurrentListItemColor.withHue(
+                (debugCurrentListItemColor.hue + 2) % 360.0,
+              );
               built = DecoratedBox(
-                decoration: BoxDecoration(color: debugCurrentListItemColor.toColor()),
+                decoration: BoxDecoration(
+                  color: debugCurrentListItemColor.toColor(),
+                ),
                 position: DecorationPosition.foreground,
                 child: built,
               );
@@ -419,7 +425,11 @@ mixin ListViewElementMixin on RenderObjectElement {
   }
 
   @override
-  void moveRenderObjectChild(RenderBox child, ListViewSlot? oldSlot, ListViewSlot newSlot) {
+  void moveRenderObjectChild(
+    RenderBox child,
+    ListViewSlot? oldSlot,
+    ListViewSlot newSlot,
+  ) {
     assert(child.parent == renderObject);
     renderObject.move(child, index: newSlot.index);
     assert(child.parent == renderObject);
@@ -433,7 +443,8 @@ mixin ListViewElementMixin on RenderObjectElement {
   }
 }
 
-class BasicListViewElement extends RenderObjectElement with ListViewElementMixin {
+class BasicListViewElement extends RenderObjectElement
+    with ListViewElementMixin {
   BasicListViewElement(BasicListView listView) : super(listView);
 
   @override
@@ -455,10 +466,7 @@ class BasicListViewElement extends RenderObjectElement with ListViewElementMixin
 }
 
 class RenderBasicListView extends RenderSegment {
-  RenderBasicListView({
-    required double itemHeight,
-    required int length,
-  }) {
+  RenderBasicListView({required double itemHeight, required int length}) {
     this.itemHeight = itemHeight;
     this.length = length;
   }
@@ -501,7 +509,8 @@ class RenderBasicListView extends RenderSegment {
 
   void remove(RenderBox child) {
     assert(child.parentData is ListViewParentData);
-    final ListViewParentData parentData = child.parentData as ListViewParentData;
+    final ListViewParentData parentData =
+        child.parentData as ListViewParentData;
     assert(_children[parentData.index] == child);
     _children.remove(parentData.index);
     dropChild(child);
@@ -564,7 +573,10 @@ class RenderBasicListView extends RenderSegment {
   }
 
   @protected
-  void visitListItems(ListItemChildVisitor visitor, {bool allowMutations = false}) {
+  void visitListItems(
+    ListItemChildVisitor visitor, {
+    bool allowMutations = false,
+  }) {
     Iterable<MapEntry<int, RenderBox>> items = _children.entries;
     if (allowMutations) items = items.toList(growable: false);
     for (MapEntry<int, RenderBox> item in items) {
@@ -638,19 +650,25 @@ class RenderBasicListView extends RenderSegment {
   }
 
   @override
-  double computeMaxIntrinsicHeight(double width) => computeMinIntrinsicHeight(width);
+  double computeMaxIntrinsicHeight(double width) =>
+      computeMinIntrinsicHeight(width);
 
   @override
   @protected
   void performLayout() {
-    size = constraints.constrainDimensions(double.infinity, itemHeight * length);
+    size = constraints.constrainDimensions(
+      double.infinity,
+      itemHeight * length,
+    );
 
     // Relies on size being set.
     rebuildIfNecessary();
 
     visitListItems((RenderBox child, int index) {
       final double itemY = index * itemHeight;
-      child.layout(BoxConstraints.tightFor(width: size.width, height: itemHeight));
+      child.layout(
+        BoxConstraints.tightFor(width: size.width, height: itemHeight),
+      );
       final BoxParentData parentData = child.parentData as BoxParentData;
       parentData.offset = Offset(0, itemY);
     });
@@ -702,14 +720,16 @@ class RenderBasicListView extends RenderSegment {
     }
 
     final ListItemRange builtCells = this.builtCells();
-    final ListItemSequence viewportItemSequence = _getIntersectingItems(_viewport!);
+    final ListItemSequence viewportItemSequence = _getIntersectingItems(
+      _viewport!,
+    );
     ListItemRange removeCells = builtCells.subtract(viewportItemSequence);
     ListItemRange buildCells;
 
     if (_needsBuild) {
       removeCells = UnionListItemRange(<ListItemRange>[
         removeCells,
-        builtCells.where((int index) => index >= length)
+        builtCells.where((int index) => index >= length),
       ]);
       buildCells = viewportItemSequence;
       _needsBuild = false;
@@ -724,8 +744,12 @@ class RenderBasicListView extends RenderSegment {
       assert(previousViewport != null);
       if (_viewport!.overlaps(previousViewport!)) {
         final Rect overlap = _viewport!.intersect(previousViewport);
-        final ListItemSequence overlapItemSequence = _getIntersectingItems(overlap);
-        removeCells = _getIntersectingItems(previousViewport).subtract(overlapItemSequence);
+        final ListItemSequence overlapItemSequence = _getIntersectingItems(
+          overlap,
+        );
+        removeCells = _getIntersectingItems(
+          previousViewport,
+        ).subtract(overlapItemSequence);
         buildCells = viewportItemSequence.subtract(overlapItemSequence);
       } else {
         buildCells = viewportItemSequence;

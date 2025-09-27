@@ -20,10 +20,8 @@ import 'package:flutter/widgets.dart';
 /// See also:
 ///
 ///  * [NavigatorListenerController.addObserver], where this signature is used.
-typedef NavigatorObserverCallback = void Function(
-  Route<dynamic> route,
-  Route<dynamic>? previousRoute,
-);
+typedef NavigatorObserverCallback =
+    void Function(Route<dynamic> route, Route<dynamic>? previousRoute);
 
 /// Signature for a function that receives [NavigatorObserver.didReplace]
 /// notifications.
@@ -31,10 +29,8 @@ typedef NavigatorObserverCallback = void Function(
 /// See also:
 ///
 ///  * [NavigatorListenerController.addObserver], where this signature is used.
-typedef NavigatorObserverOnReplacedCallback = void Function(
-  Route<dynamic>? route,
-  Route<dynamic>? previousRoute,
-);
+typedef NavigatorObserverOnReplacedCallback =
+    void Function(Route<dynamic>? route, Route<dynamic>? previousRoute);
 
 /// The result of a call to [NavigatorListenerController.addObserver].
 ///
@@ -159,24 +155,20 @@ class _NavigatorListenerState extends State<NavigatorListener>
 
   @override
   Widget build(BuildContext context) {
-    return _Scope(
-      navigatorListenerState: this,
-      child: widget.child,
-    );
+    return _Scope(navigatorListenerState: this, child: widget.child);
   }
 }
 
 class _Scope extends InheritedWidget {
-  const _Scope({
-    required this.navigatorListenerState,
-    required Widget child,
-  }) : super(child: child);
+  const _Scope({required this.navigatorListenerState, required Widget child})
+    : super(child: child);
 
   final _NavigatorListenerState navigatorListenerState;
 
   @override
   bool updateShouldNotify(_Scope old) {
-    return navigatorListenerState.observer != old.navigatorListenerState.observer;
+    return navigatorListenerState.observer !=
+        old.navigatorListenerState.observer;
   }
 }
 
@@ -212,7 +204,10 @@ class _AggregateObserver extends NavigatorObserver {
   }
 
   @override
-  void didStartUserGesture(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didStartUserGesture(
+    Route<dynamic> route,
+    Route<dynamic>? previousRoute,
+  ) {
     for (NavigatorObserver proxy in proxies) {
       proxy.didStartUserGesture(route, previousRoute);
     }
@@ -272,7 +267,10 @@ class _ProxyObserver extends NavigatorObserver {
   }
 
   @override
-  void didStartUserGesture(Route<dynamic> route, Route<dynamic>? previousRoute) {
+  void didStartUserGesture(
+    Route<dynamic> route,
+    Route<dynamic>? previousRoute,
+  ) {
     if (onStartUserGesture != null) {
       onStartUserGesture!(route, previousRoute);
     }

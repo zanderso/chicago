@@ -13,6 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:io' as io show Platform;
+
 import 'package:chicago/chicago.dart';
 import 'package:flutter/widgets.dart' hide TableCell, TableRow;
 import 'package:flutter_test/flutter_test.dart';
@@ -21,16 +23,31 @@ const String kShortString = 'Short';
 const String kLongString = 'Very Very Very Long';
 const String kPlaceholderString = '-';
 const double kAhemGlyphEmSize = 14;
-const Size kShortStringSize = Size(kAhemGlyphEmSize * kShortString.length, kAhemGlyphEmSize);
-const Size kLongStringSize = Size(kAhemGlyphEmSize * kLongString.length, kAhemGlyphEmSize);
-const Size kPlaceholderStringSize = Size(kAhemGlyphEmSize * kPlaceholderString.length, kAhemGlyphEmSize);
-const EdgeInsets kContentPadding = EdgeInsets.symmetric(horizontal: 5, vertical: 2);
+const Size kShortStringSize = Size(
+  kAhemGlyphEmSize * kShortString.length,
+  kAhemGlyphEmSize,
+);
+const Size kLongStringSize = Size(
+  kAhemGlyphEmSize * kLongString.length,
+  kAhemGlyphEmSize,
+);
+const Size kPlaceholderStringSize = Size(
+  kAhemGlyphEmSize * kPlaceholderString.length,
+  kAhemGlyphEmSize,
+);
+const EdgeInsets kContentPadding = EdgeInsets.symmetric(
+  horizontal: 5,
+  vertical: 2,
+);
 const EdgeInsets kBorder = EdgeInsets.all(1);
 const double kPulldownWidth = 15;
 const double kDividerWidth = 1;
 const double kMinHeight = 20;
 final Offset kNonContentBounds = Offset(
-  kContentPadding.horizontal + kBorder.horizontal + kPulldownWidth + kDividerWidth,
+  kContentPadding.horizontal +
+      kBorder.horizontal +
+      kPulldownWidth +
+      kDividerWidth,
   kContentPadding.vertical + kBorder.vertical,
 );
 
@@ -38,7 +55,11 @@ class TypeLiteral<T> {
   Type get type => T;
 }
 
-Widget buildItem(BuildContext context, String? item, bool isForMeasurementOnly) {
+Widget buildItem(
+  BuildContext context,
+  String? item,
+  bool isForMeasurementOnly,
+) {
   final TextStyle style = DefaultTextStyle.of(context).style;
   final TextDirection textDirection = Directionality.of(context);
   return Text(
@@ -87,9 +108,11 @@ void main() {
       find.byType(TypeLiteral<ListButton<String>>().type),
       matchesGoldenFile('list_button_test.golden.png'),
     );
-  });
+  }, skip: !io.Platform.isMacOS);
 
-  testWidgets('Only builds currently selected item', (WidgetTester tester) async {
+  testWidgets('Only builds currently selected item', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(buildListButtonScaffold());
 
     expect(find.text(kShortString), findsNothing);
@@ -109,71 +132,127 @@ void main() {
     expect(find.text(kPlaceholderString), findsNothing);
   });
 
-  testWidgets('ListButtonWidth.shrinkWrapAllItems sets correct width with unbounded constraints', (WidgetTester tester) async {
-    await tester.pumpWidget(buildListButtonScaffold(width: ListButtonWidth.shrinkWrapAllItems));
-    expect(tester.getSize(find.text(kPlaceholderString)), kLongStringSize);
+  testWidgets(
+    'ListButtonWidth.shrinkWrapAllItems sets correct width with unbounded constraints',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        buildListButtonScaffold(width: ListButtonWidth.shrinkWrapAllItems),
+      );
+      expect(tester.getSize(find.text(kPlaceholderString)), kLongStringSize);
 
-    selectionController.selectedIndex = 0;
-    await tester.pump();
-    expect(tester.getSize(find.text(kShortString)), kLongStringSize);
+      selectionController.selectedIndex = 0;
+      await tester.pump();
+      expect(tester.getSize(find.text(kShortString)), kLongStringSize);
 
-    selectionController.selectedIndex = 1;
-    await tester.pump();
-    expect(tester.getSize(find.text(kLongString)), kLongStringSize);
-  });
+      selectionController.selectedIndex = 1;
+      await tester.pump();
+      expect(tester.getSize(find.text(kLongString)), kLongStringSize);
+    },
+  );
 
-  testWidgets('ListButtonWidth.shrinkWrapAllItems renders correctly with bounded constraints', (WidgetTester tester) async {
-    await tester.pumpWidget(buildListButtonScaffold(
-      width: ListButtonWidth.shrinkWrapAllItems,
-      constraints: BoxConstraints(minWidth: kLongStringSize.width / 2, maxWidth: kLongStringSize.width + 50),
-    ));
+  testWidgets(
+    'ListButtonWidth.shrinkWrapAllItems renders correctly with bounded constraints',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        buildListButtonScaffold(
+          width: ListButtonWidth.shrinkWrapAllItems,
+          constraints: BoxConstraints(
+            minWidth: kLongStringSize.width / 2,
+            maxWidth: kLongStringSize.width + 50,
+          ),
+        ),
+      );
 
-    expect(tester.getSize(find.text(kPlaceholderString)), kLongStringSize);
-    expect(tester.getSize(find.byType(TypeLiteral<ListButton<String>>().type)), kLongStringSize + kNonContentBounds);
-  });
+      expect(tester.getSize(find.text(kPlaceholderString)), kLongStringSize);
+      expect(
+        tester.getSize(find.byType(TypeLiteral<ListButton<String>>().type)),
+        kLongStringSize + kNonContentBounds,
+      );
+    },
+  );
 
-  testWidgets('ListButtonWidth.shrinkWrapAllItems grows content when required', (WidgetTester tester) async {
-    await tester.pumpWidget(buildListButtonScaffold(
-      width: ListButtonWidth.shrinkWrapAllItems,
-      constraints: BoxConstraints(minWidth: kLongStringSize.width + 50),
-    ));
+  testWidgets(
+    'ListButtonWidth.shrinkWrapAllItems grows content when required',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        buildListButtonScaffold(
+          width: ListButtonWidth.shrinkWrapAllItems,
+          constraints: BoxConstraints(minWidth: kLongStringSize.width + 50),
+        ),
+      );
 
-    final Size expectedListButtonSize = kLongStringSize + Offset(50, kNonContentBounds.dy);
-    expect(tester.getSize(find.text(kPlaceholderString)), expectedListButtonSize - kNonContentBounds);
-    expect(tester.getSize(find.byType(TypeLiteral<ListButton<String>>().type)), expectedListButtonSize);
-  });
+      final Size expectedListButtonSize =
+          kLongStringSize + Offset(50, kNonContentBounds.dy);
+      expect(
+        tester.getSize(find.text(kPlaceholderString)),
+        expectedListButtonSize - kNonContentBounds,
+      );
+      expect(
+        tester.getSize(find.byType(TypeLiteral<ListButton<String>>().type)),
+        expectedListButtonSize,
+      );
+    },
+  );
 
-  testWidgets('ListButtonWidth.shrinkWrapAllItems shrinks content when required', (WidgetTester tester) async {
-    await tester.pumpWidget(buildListButtonScaffold(
-      width: ListButtonWidth.shrinkWrapAllItems,
-      constraints: BoxConstraints(maxWidth: kShortStringSize.width),
-    ));
+  testWidgets(
+    'ListButtonWidth.shrinkWrapAllItems shrinks content when required',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        buildListButtonScaffold(
+          width: ListButtonWidth.shrinkWrapAllItems,
+          constraints: BoxConstraints(maxWidth: kShortStringSize.width),
+        ),
+      );
 
-    final Size expectedListButtonSize = kShortStringSize + Offset(0, kNonContentBounds.dy);
-    expect(tester.getSize(find.text(kPlaceholderString)), expectedListButtonSize - kNonContentBounds);
-    expect(tester.getSize(find.byType(TypeLiteral<ListButton<String>>().type)), expectedListButtonSize);
-  });
+      final Size expectedListButtonSize =
+          kShortStringSize + Offset(0, kNonContentBounds.dy);
+      expect(
+        tester.getSize(find.text(kPlaceholderString)),
+        expectedListButtonSize - kNonContentBounds,
+      );
+      expect(
+        tester.getSize(find.byType(TypeLiteral<ListButton<String>>().type)),
+        expectedListButtonSize,
+      );
+    },
+  );
 
-  testWidgets('ListButtonWidth.shrinkWrapCurrentItem sets correct width with unbounded constraints', (WidgetTester tester) async {
-    await tester.pumpWidget(buildListButtonScaffold(width: ListButtonWidth.shrinkWrapCurrentItem));
-    expect(tester.getSize(find.text(kPlaceholderString)), kPlaceholderStringSize);
+  testWidgets(
+    'ListButtonWidth.shrinkWrapCurrentItem sets correct width with unbounded constraints',
+    (WidgetTester tester) async {
+      await tester.pumpWidget(
+        buildListButtonScaffold(width: ListButtonWidth.shrinkWrapCurrentItem),
+      );
+      expect(
+        tester.getSize(find.text(kPlaceholderString)),
+        kPlaceholderStringSize,
+      );
 
-    selectionController.selectedIndex = 0;
-    await tester.pump();
-    expect(tester.getSize(find.text(kShortString)), kShortStringSize);
+      selectionController.selectedIndex = 0;
+      await tester.pump();
+      expect(tester.getSize(find.text(kShortString)), kShortStringSize);
 
-    selectionController.selectedIndex = 1;
-    await tester.pump();
-    expect(tester.getSize(find.text(kLongString)), kLongStringSize);
-  });
+      selectionController.selectedIndex = 1;
+      await tester.pump();
+      expect(tester.getSize(find.text(kLongString)), kLongStringSize);
+    },
+  );
 
-  testWidgets('ListButtonWidth.expand sets expanded width', (WidgetTester tester) async {
-    await tester.pumpWidget(buildListButtonScaffold(
-      width: ListButtonWidth.expand,
-      constraints: BoxConstraints(maxWidth: 500),
-    ));
-    final Size expectedListButtonSize = Size(500, kAhemGlyphEmSize + kNonContentBounds.dy);
-    final Size expectedContentSize = expectedListButtonSize - kNonContentBounds as Size;
+  testWidgets('ListButtonWidth.expand sets expanded width', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      buildListButtonScaffold(
+        width: ListButtonWidth.expand,
+        constraints: BoxConstraints(maxWidth: 500),
+      ),
+    );
+    final Size expectedListButtonSize = Size(
+      500,
+      kAhemGlyphEmSize + kNonContentBounds.dy,
+    );
+    final Size expectedContentSize =
+        expectedListButtonSize - kNonContentBounds as Size;
     expect(tester.getSize(find.text(kPlaceholderString)), expectedContentSize);
 
     selectionController.selectedIndex = 0;
@@ -185,8 +264,12 @@ void main() {
     expect(tester.getSize(find.text(kLongString)), expectedContentSize);
   });
 
-  testWidgets('ListButtonWidth.expand fails with unbounded with', (WidgetTester tester) async {
-    await tester.pumpWidget(buildListButtonScaffold(width: ListButtonWidth.expand));
+  testWidgets('ListButtonWidth.expand fails with unbounded with', (
+    WidgetTester tester,
+  ) async {
+    await tester.pumpWidget(
+      buildListButtonScaffold(width: ListButtonWidth.expand),
+    );
     expect(tester.takeException(), isFlutterError);
   });
 }

@@ -32,10 +32,8 @@ abstract class ViewportResolver {
 class StaticViewportResolver implements ViewportResolver {
   const StaticViewportResolver(this.viewport);
 
-  StaticViewportResolver.fromParts({
-    required Offset offset,
-    required Size size,
-  }) : viewport = offset & size;
+  StaticViewportResolver.fromParts({required Offset offset, required Size size})
+    : viewport = offset & size;
 
   final Rect viewport;
 
@@ -70,7 +68,12 @@ class SegmentConstraints extends BoxConstraints {
     double minHeight = 0,
     double maxHeight = double.infinity,
     required this.viewportResolver,
-  }) : super(minWidth: minWidth, maxWidth: maxWidth, minHeight: minHeight, maxHeight: maxHeight);
+  }) : super(
+         minWidth: minWidth,
+         maxWidth: maxWidth,
+         minHeight: minHeight,
+         maxHeight: maxHeight,
+       );
 
   SegmentConstraints.tightFor({
     double? width,
@@ -125,11 +128,14 @@ abstract class RenderSegment extends RenderBox {
   void _debugCheckConstraints(Constraints constraints) {
     assert(() {
       if (constraints is! SegmentConstraints) {
-        FlutterError.reportError(FlutterErrorDetails(
-          exception: 'RenderSegment was given constraints other than SegmentConstraints',
-          stack: StackTrace.current,
-          library: 'chicago',
-        ));
+        FlutterError.reportError(
+          FlutterErrorDetails(
+            exception:
+                'RenderSegment was given constraints other than SegmentConstraints',
+            stack: StackTrace.current,
+            library: 'chicago',
+          ),
+        );
       }
       return true;
     }());

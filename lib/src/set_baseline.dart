@@ -17,11 +17,8 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 class SetBaseline extends SingleChildRenderObjectWidget {
-  SetBaseline({
-    Key? key,
-    required Widget child,
-    required this.baseline,
-  }) : super(key: key, child: child);
+  SetBaseline({Key? key, required Widget child, required this.baseline})
+    : super(key: key, child: child);
 
   final double baseline;
 
@@ -31,12 +28,16 @@ class SetBaseline extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, RenderSetBaseline renderObject) {
+  void updateRenderObject(
+    BuildContext context,
+    RenderSetBaseline renderObject,
+  ) {
     renderObject.baseline = baseline;
   }
 }
 
-class RenderSetBaseline extends RenderBox with RenderObjectWithChildMixin<RenderBox> {
+class RenderSetBaseline extends RenderBox
+    with RenderObjectWithChildMixin<RenderBox> {
   RenderSetBaseline({required double baseline}) {
     this.baseline = baseline;
   }
@@ -85,7 +86,7 @@ class RenderSetBaseline extends RenderBox with RenderObjectWithChildMixin<Render
   }
 
   @override
-  bool hitTestChildren(BoxHitTestResult result, { required Offset position }) {
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) {
     if (child == null) return false;
     return child!.hitTest(result, position: position);
   }

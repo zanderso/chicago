@@ -46,11 +46,7 @@ int binarySearch<T>(
   return -(min + 1);
 }
 
-enum SelectMode {
-  none,
-  single,
-  multi,
-}
+enum SelectMode { none, single, multi }
 
 /// Returns a [Comparator] that asserts that its first argument is comparable.
 Comparator<T> _defaultCompare<T>() {
@@ -59,7 +55,8 @@ Comparator<T> _defaultCompare<T>() {
 
 /// Returns true if any shift key is pressed on a physical keyboard.
 bool isShiftKeyPressed() {
-  final Set<LogicalKeyboardKey> keys = HardwareKeyboard.instance.logicalKeysPressed;
+  final Set<LogicalKeyboardKey> keys =
+      HardwareKeyboard.instance.logicalKeysPressed;
   return keys.contains(LogicalKeyboardKey.shiftLeft) ||
       keys.contains(LogicalKeyboardKey.shiftRight);
 }
@@ -70,7 +67,8 @@ bool isShiftKeyPressed() {
 /// key on other platforms.
 bool isPlatformCommandKeyPressed([TargetPlatform? platform]) {
   platform ??= defaultTargetPlatform;
-  final Set<LogicalKeyboardKey> keys = HardwareKeyboard.instance.logicalKeysPressed;
+  final Set<LogicalKeyboardKey> keys =
+      HardwareKeyboard.instance.logicalKeysPressed;
   switch (platform) {
     case TargetPlatform.macOS:
       return keys.contains(LogicalKeyboardKey.metaLeft) ||
@@ -82,11 +80,20 @@ bool isPlatformCommandKeyPressed([TargetPlatform? platform]) {
 }
 
 bool isActivateKey(LogicalKeyboardKey key) {
-  final Iterable<LogicalKeyboardKey> activateKeys = WidgetsApp.defaultShortcuts.entries
-      .where((MapEntry<ShortcutActivator, Intent> entry) => entry.value is ActivateIntent)
-      .map<ShortcutActivator>((MapEntry<ShortcutActivator, Intent> entry) => entry.key)
+  final Iterable<LogicalKeyboardKey> activateKeys = WidgetsApp
+      .defaultShortcuts
+      .entries
+      .where(
+        (MapEntry<ShortcutActivator, Intent> entry) =>
+            entry.value is ActivateIntent,
+      )
+      .map<ShortcutActivator>(
+        (MapEntry<ShortcutActivator, Intent> entry) => entry.key,
+      )
       .where((ShortcutActivator activator) => activator.triggers?.length == 1)
-      .map<LogicalKeyboardKey>((ShortcutActivator activator) => activator.triggers!.single);
+      .map<LogicalKeyboardKey>(
+        (ShortcutActivator activator) => activator.triggers!.single,
+      );
   return activateKeys.contains(key);
 }
 
@@ -116,22 +123,17 @@ class Vote {
 }
 
 class LinearConstraints extends Constraints {
-  const LinearConstraints({
-    this.min = 0,
-    this.max = double.infinity,
-  });
+  const LinearConstraints({this.min = 0, this.max = double.infinity});
 
-  const LinearConstraints.tight(double value)
-      : min = value,
-        max = value;
+  const LinearConstraints.tight(double value) : min = value, max = value;
 
   LinearConstraints.width(BoxConstraints constraints)
-      : min = constraints.minWidth,
-        max = constraints.maxWidth;
+    : min = constraints.minWidth,
+      max = constraints.maxWidth;
 
   LinearConstraints.height(BoxConstraints constraints)
-      : min = constraints.minHeight,
-        max = constraints.maxHeight;
+    : min = constraints.minHeight,
+      max = constraints.maxHeight;
 
   final double min;
   final double max;
@@ -180,11 +182,17 @@ class MessageType {
   static const MessageType info = MessageType._('info');
 
   Widget toImage() {
-    return Image.asset('assets/message_type-$_assetKey-32x32.png', package: 'chicago');
+    return Image.asset(
+      'assets/message_type-$_assetKey-32x32.png',
+      package: 'chicago',
+    );
   }
 
   Widget toSmallImage() {
-    return Image.asset('assets/message_type-$_assetKey-16x16.png', package: 'chicago');
+    return Image.asset(
+      'assets/message_type-$_assetKey-16x16.png',
+      package: 'chicago',
+    );
   }
 }
 
@@ -230,7 +238,10 @@ class FakeSubscription<T> implements StreamSubscription<T> {
 }
 
 mixin RenderBoxWithChildDefaultsMixin on RenderObjectWithChildMixin<RenderBox> {
-  bool defaultHitTestChild(BoxHitTestResult result, {required ui.Offset position}) {
+  bool defaultHitTestChild(
+    BoxHitTestResult result, {
+    required ui.Offset position,
+  }) {
     if (child == null) {
       return false;
     }

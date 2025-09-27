@@ -1,0 +1,56 @@
+name: Flutter Checks
+
+on:
+  pull_request:
+    branches: [ master ]
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        channel: [stable, master]
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: ${{ matrix.channel }}
+
+      - name: Flutter initialization
+        run: |
+          flutter --disable-analytics
+          flutter --version
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Verify formatting
+        run: dart format --output=none --set-exit-if-changed .
+
+      - name: Analyze project
+        run: flutter analyze
+      
+      - name: Run Flutter tests
+        run: flutter test
+
+      - name: Build example for macOS
+        if: matrix.os == 'macos-latest'
+        run: |
+          cd example
+          flutter pub get
+          flutter build macos
+
+      - name: Build example for Web
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          cd example
+          flutter pub get
+          flutter build web
+

@@ -46,10 +46,7 @@ class _ActivityIndicatorState extends State<ActivityIndicator>
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(
-      duration: _duration,
-      vsync: this,
-    );
+    _controller = AnimationController(duration: _duration, vsync: this);
   }
 
   @override
@@ -84,14 +81,14 @@ class _RawActivityIndicator extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _RenderRawActivityIndicator(
-      color: color,
-      controller: controller,
-    );
+    return _RenderRawActivityIndicator(color: color, controller: controller);
   }
 
   @override
-  void updateRenderObject(BuildContext context, _RenderRawActivityIndicator renderObject) {
+  void updateRenderObject(
+    BuildContext context,
+    _RenderRawActivityIndicator renderObject,
+  ) {
     renderObject
       ..color = color
       ..controller = controller;
@@ -102,9 +99,9 @@ class _RenderRawActivityIndicator extends RenderBox with VisibilityAwareMixin {
   _RenderRawActivityIndicator({
     Color color = _defaultColor,
     required AnimationController controller,
-  })  : _color = color,
-        _colors = _splitColor(color),
-        _controller = controller {
+  }) : _color = color,
+       _colors = _splitColor(color),
+       _controller = controller {
     assert(!_controller.isAnimating);
   }
 
@@ -227,18 +224,18 @@ class _RenderRawActivityIndicator extends RenderBox with VisibilityAwareMixin {
     final Paint paint = Paint()..style = PaintingStyle.fill;
     for (int i = 0; i < _spokes; i++) {
       paint.color = _colors[i];
-      canvas.drawRRect(RRect.fromLTRBR(24, -4, 56, 4, Radius.circular(4)), paint);
+      canvas.drawRRect(
+        RRect.fromLTRBR(24, -4, 56, 4, Radius.circular(4)),
+        paint,
+      );
       canvas.rotate(increment);
     }
   }
 }
 
 class _StepTween extends Tween<double> {
-  _StepTween({
-    required double begin,
-    required double end,
-    required this.step,
-  }) : super(begin: begin, end: end);
+  _StepTween({required double begin, required double end, required this.step})
+    : super(begin: begin, end: end);
 
   final double step;
 

@@ -19,21 +19,14 @@ import 'action_tracker.dart';
 import 'hover_builder.dart';
 
 class LinkButton extends StatelessWidget {
-  const LinkButton({
-    Key? key,
-    this.image,
-    required this.text,
-    this.onPressed,
-  }) : super(key: key);
+  const LinkButton({Key? key, this.image, required this.text, this.onPressed})
+    : super(key: key);
 
   final ImageProvider? image;
   final String text;
   final VoidCallback? onPressed;
 
-  Widget _buildContent({
-    required Color color,
-    bool hover = false,
-  }) {
+  Widget _buildContent({required Color color, bool hover = false}) {
     Widget? imageWidget;
     if (image != null) {
       imageWidget = Padding(
@@ -41,10 +34,7 @@ class LinkButton extends StatelessWidget {
         child: Image(image: image!),
       );
       if (onPressed == null) {
-        imageWidget = Opacity(
-          opacity: 0.5,
-          child: imageWidget,
-        );
+        imageWidget = Opacity(opacity: 0.5, child: imageWidget);
       }
     }
 
@@ -64,19 +54,14 @@ class LinkButton extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        if (imageWidget != null) imageWidget,
-        link,
-      ],
+      children: <Widget>[if (imageWidget != null) imageWidget, link],
     );
   }
 
   @override
   Widget build(BuildContext context) {
     if (onPressed == null) {
-      return _buildContent(
-        color: const Color(0xff999999),
-      );
+      return _buildContent(color: const Color(0xff999999));
     } else {
       return Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,7 +101,8 @@ class ActionLinkButton<I extends Intent> extends ActionTracker<I> {
   _ActionLinkButtonState<I> createState() => _ActionLinkButtonState<I>();
 }
 
-class _ActionLinkButtonState<I extends Intent> extends State<ActionLinkButton<I>>
+class _ActionLinkButtonState<I extends Intent>
+    extends State<ActionLinkButton<I>>
     with ActionTrackerStateMixin<I, ActionLinkButton<I>> {
   @override
   Widget build(BuildContext context) {

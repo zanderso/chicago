@@ -14,7 +14,8 @@
 // limitations under the License.
 
 // Needed because chicago.TextInput still depends on Material
-import 'package:flutter/material.dart' show DefaultMaterialLocalizations, Material;
+import 'package:flutter/material.dart'
+    show DefaultMaterialLocalizations, Material;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
@@ -22,11 +23,8 @@ import 'navigator_listener.dart';
 import 'scroll_pane.dart';
 
 class ChicagoApp extends StatefulWidget {
-  const ChicagoApp({
-    Key? key,
-    this.title = 'Chicago App',
-    this.home,
-  }) : super(key: key);
+  const ChicagoApp({Key? key, this.title = 'Chicago App', this.home})
+    : super(key: key);
 
   final String title;
   final Widget? home;
@@ -49,7 +47,8 @@ class _ChicagoAppState extends State<ChicagoApp> with WidgetsBindingObserver {
         SchedulerBinding.instance.addPostFrameCallback((Duration timeStamp) {
           _scrollToVisibleScheduled = false;
           assert(mounted && scrollPane.mounted && focusNode.hasPrimaryFocus);
-          final RenderObject? focusRenderObject = focusContext.findRenderObject();
+          final RenderObject? focusRenderObject =
+              focusContext.findRenderObject();
           if (focusRenderObject is RenderBox) {
             final Rect focusRect = Offset.zero & focusRenderObject.size;
             scrollPane.scrollToVisible(focusRect, context: focusContext);
@@ -90,13 +89,18 @@ class _ChicagoAppState extends State<ChicagoApp> with WidgetsBindingObserver {
                 color: Color(0xff000000),
               ),
               child: SafeArea(
-                child: Material( // TODO: Remove
+                child: Material(
+                  // TODO: Remove
                   child: Navigator(
                     observers: [NavigatorListener.of(context).observer],
                     onGenerateRoute: (RouteSettings settings) {
                       return PageRouteBuilder<void>(
                         settings: settings,
-                        pageBuilder: (BuildContext _, Animation<double> __, Animation<double> ___) {
+                        pageBuilder: (
+                          BuildContext _,
+                          Animation<double> __,
+                          Animation<double> ___,
+                        ) {
                           return widget.home ?? Container();
                         },
                       );

@@ -15,10 +15,7 @@
 
 import 'package:flutter/rendering.dart';
 
-enum SortDirection {
-  ascending,
-  descending,
-}
+enum SortDirection { ascending, descending }
 
 class SortIndicatorPainter extends CustomPainter {
   const SortIndicatorPainter({
@@ -33,9 +30,10 @@ class SortIndicatorPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = color
-      ..isAntiAlias = isAntiAlias;
+    final Paint paint =
+        Paint()
+          ..color = color
+          ..isAntiAlias = isAntiAlias;
     Path path = Path();
     const double zero = 0;
     final double x1 = (size.width - 1) / 2;

@@ -13,7 +13,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:flutter/material.dart' show InputBorder, InputDecoration, OutlineInputBorder, TextField;
+import 'package:flutter/material.dart'
+    show InputBorder, InputDecoration, OutlineInputBorder, TextField;
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
@@ -151,7 +152,8 @@ class _TextInputState extends State<TextInput> {
       cursorColor: const Color(0xff000000),
       style: const TextStyle(fontFamily: 'Verdana', fontSize: 11),
       decoration: InputDecoration(
-        fillColor: widget.enabled ? widget.backgroundColor : _disabledBackgroundColor,
+        fillColor:
+            widget.enabled ? widget.backgroundColor : _disabledBackgroundColor,
         hoverColor: widget.backgroundColor,
         filled: true,
         contentPadding: const EdgeInsets.fromLTRB(3, 13, 0, 4),

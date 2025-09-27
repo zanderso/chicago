@@ -20,24 +20,20 @@ const double _checkboxSize = 14;
 const double _checkmarkSize = 10;
 const double _defaultSpacing = 6;
 
-enum CheckboxState {
-  checked,
-  unchecked,
-  mixed,
-}
+enum CheckboxState { checked, unchecked, mixed }
 
 class CheckboxController extends ChangeNotifier {
   CheckboxController.simple([bool checked = false])
-      : _isTriState = false,
-        _canUserToggleMixed = false,
-        _state = checked ? CheckboxState.checked : CheckboxState.unchecked;
+    : _isTriState = false,
+      _canUserToggleMixed = false,
+      _state = checked ? CheckboxState.checked : CheckboxState.unchecked;
 
   CheckboxController.triState({
     CheckboxState state = CheckboxState.unchecked,
     bool canUserToggleMixed = false,
-  })  : _isTriState = true,
-        _canUserToggleMixed = canUserToggleMixed,
-        _state = state;
+  }) : _isTriState = true,
+       _canUserToggleMixed = canUserToggleMixed,
+       _state = state;
 
   final bool _isTriState;
   bool get isTriState => _isTriState;
@@ -56,7 +52,8 @@ class CheckboxController extends ChangeNotifier {
   }
 
   bool get checked => _state == CheckboxState.checked;
-  set checked(bool value) => state = value ? CheckboxState.checked : CheckboxState.unchecked;
+  set checked(bool value) =>
+      state = value ? CheckboxState.checked : CheckboxState.unchecked;
 
   void toggleState() {
     if (canUserToggleMixed) {
@@ -152,7 +149,8 @@ class _CheckboxState extends State<Checkbox> {
   void didUpdateWidget(covariant Checkbox oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.controller != oldWidget.controller) {
-      final CheckboxController oldController = _controller ?? oldWidget.controller!;
+      final CheckboxController oldController =
+          _controller ?? oldWidget.controller!;
       oldController.removeListener(_handleChanged);
       _controller?.dispose();
       _controller = null;
@@ -208,17 +206,16 @@ class BasicCheckbox extends StatelessWidget {
         child: styledTrailing,
       );
       if (!isEnabled) {
-        styledTrailing = Opacity(
-          opacity: 0.5,
-          child: styledTrailing,
-        );
+        styledTrailing = Opacity(opacity: 0.5, child: styledTrailing);
       }
     }
 
     final Decoration backgroundDecoration;
     if (isEnabled) {
       backgroundDecoration = BoxDecoration(
-        border: const Border.fromBorderSide(BorderSide(color: Color(0xff999999))),
+        border: const Border.fromBorderSide(
+          BorderSide(color: Color(0xff999999)),
+        ),
         gradient: LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
@@ -245,12 +242,7 @@ class BasicCheckbox extends StatelessWidget {
     );
 
     if (styledTrailing != null) {
-      result = Row(
-        children: <Widget>[
-          result,
-          styledTrailing,
-        ],
-      );
+      result = Row(children: <Widget>[result, styledTrailing]);
     }
 
     if (isEnabled) {
@@ -258,9 +250,7 @@ class BasicCheckbox extends StatelessWidget {
         cursor: SystemMouseCursors.click,
         child: GestureDetector(
           onTap: onTap,
-          child: AbsorbPointer(
-            child: result,
-          ),
+          child: AbsorbPointer(child: result),
         ),
       );
     }
@@ -280,8 +270,10 @@ class CheckPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = isEnabled ? _enabledCheckmarkColor : _disabledCheckmarkColor;
+    final Paint paint =
+        Paint()
+          ..color =
+              isEnabled ? _enabledCheckmarkColor : _disabledCheckmarkColor;
 
     switch (state) {
       case CheckboxState.checked:
@@ -295,15 +287,26 @@ class CheckPainter extends CustomPainter {
         double dy = (_checkboxSize - n) / 2;
         canvas.save();
         canvas.translate(0, (size.height - _checkboxSize) / 2);
-        canvas.drawLine(Offset(dx, (n - m) + dy), Offset(m + dx, n + dy), paint);
-        canvas.drawLine(Offset(m + dx, n + dy), Offset((m + n) + dx, dy), paint);
+        canvas.drawLine(
+          Offset(dx, (n - m) + dy),
+          Offset(m + dx, n + dy),
+          paint,
+        );
+        canvas.drawLine(
+          Offset(m + dx, n + dy),
+          Offset((m + n) + dx, dy),
+          paint,
+        );
         canvas.restore();
         break;
       case CheckboxState.mixed:
         paint
           ..style = PaintingStyle.fill
           ..isAntiAlias = false;
-        canvas.drawRect(Rect.fromLTWH(4, _checkboxSize / 2 - 1, _checkboxSize - 8, 2), paint);
+        canvas.drawRect(
+          Rect.fromLTWH(4, _checkboxSize / 2 - 1, _checkboxSize - 8, 2),
+          paint,
+        );
         break;
       case CheckboxState.unchecked:
         // Nothing to paint.

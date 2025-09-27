@@ -16,21 +16,15 @@
 import 'package:flutter/widgets.dart';
 
 class Tab {
-  const Tab({
-    required this.label,
-    required this.builder,
-  });
+  const Tab({required this.label, required this.builder});
 
   final String label;
   final WidgetBuilder builder;
 }
 
 class TabPane extends StatefulWidget {
-  const TabPane({
-    Key? key,
-    this.initialSelectedIndex = 0,
-    required this.tabs,
-  }) : super(key: key);
+  const TabPane({Key? key, this.initialSelectedIndex = 0, required this.tabs})
+    : super(key: key);
 
   final int initialSelectedIndex;
   final List<Tab> tabs;
@@ -137,10 +131,7 @@ class _TabPaneState extends State<TabPane> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: tabs,
-        ),
+        Row(crossAxisAlignment: CrossAxisAlignment.end, children: tabs),
         Expanded(
           child: DecoratedBox(
             decoration: const BoxDecoration(
