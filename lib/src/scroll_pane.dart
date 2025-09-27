@@ -431,7 +431,8 @@ class ScrollPaneState extends State<ScrollPane> with SingleTickerProviderStateMi
     assert(!_isUserPanning);
     assert(!_panAnimationController.isAnimating);
     assert(_panAnimation == null);
-    if (details.kind == PointerDeviceKind.touch) {
+    if (details.kind == PointerDeviceKind.touch ||
+        details.kind == PointerDeviceKind.trackpad) {
       _isUserPanning = true;
     }
   }
