@@ -211,9 +211,9 @@ class _MultiSelectListDemoState extends State<MultiSelectListDemo> {
   @override
   void initState() {
     super.initState();
-    _selectionController =
-        ListViewSelectionController(selectMode: SelectMode.multi)
-          ..selectedRanges = [Span(0, 0), Span(2, 3)];
+    _selectionController = ListViewSelectionController(
+      selectMode: SelectMode.multi,
+    )..selectedRanges = [Span(0, 0), Span(2, 3)];
   }
 
   @override
@@ -289,8 +289,8 @@ class _ImageListDemoState extends State<ImageListDemo> {
         isDisabled
             ? GreyText(text)
             : isSelected
-                ? WhiteText(text)
-                : Text(text),
+            ? WhiteText(text)
+            : Text(text),
       ],
     );
   }
@@ -299,8 +299,9 @@ class _ImageListDemoState extends State<ImageListDemo> {
   void initState() {
     super.initState();
     _selectionController = ListViewSelectionController();
-    _disablerController = ListViewItemDisablerController()
-      ..filter = (int index) => index == 2 || index == 3;
+    _disablerController =
+        ListViewItemDisablerController()
+          ..filter = (int index) => index == 2 || index == 3;
   }
 
   @override
@@ -366,10 +367,7 @@ class _ListButtonsDemoState extends State<ListButtonsDemo> {
       child: SetBaseline(
         baseline: 15.5,
         child: DecoratedBox(
-          decoration: BoxDecoration(
-            border: Border.all(),
-            color: item.color,
-          ),
+          decoration: BoxDecoration(border: Border.all(), color: item.color),
         ),
       ),
     );
@@ -388,12 +386,12 @@ class _ListButtonsDemoState extends State<ListButtonsDemo> {
   @override
   void initState() {
     super.initState();
-    _basicSelectionController = ListViewSelectionController()
-      ..selectedIndex = 0;
-    _imageSelectionController = ListViewSelectionController()
-      ..selectedIndex = 2;
-    _colorSelectionController = ListViewSelectionController()
-      ..selectedIndex = 0;
+    _basicSelectionController =
+        ListViewSelectionController()..selectedIndex = 0;
+    _imageSelectionController =
+        ListViewSelectionController()..selectedIndex = 2;
+    _colorSelectionController =
+        ListViewSelectionController()..selectedIndex = 0;
   }
 
   @override
@@ -424,8 +422,11 @@ class _ListButtonsDemoState extends State<ListButtonsDemo> {
               child: ListButton<String>(
                 items: ['anchor', 'bell', 'clock', 'cup', 'house', 'star'],
                 selectionController: _imageSelectionController,
-                builder: (BuildContext context, String? item,
-                    bool isForMeasurementOnly) {
+                builder: (
+                  BuildContext context,
+                  String? item,
+                  bool isForMeasurementOnly,
+                ) {
                   final String asset = item as String;
                   final String path = 'assets/$asset.png';
                   final String label =
@@ -436,11 +437,7 @@ class _ListButtonsDemoState extends State<ListButtonsDemo> {
                       children: [
                         Image.asset(path),
                         SizedBox(width: 4),
-                        Text(
-                          label,
-                          maxLines: 1,
-                          softWrap: false,
-                        ),
+                        Text(label, maxLines: 1, softWrap: false),
                       ],
                     ),
                   );
@@ -464,8 +461,8 @@ class _ListButtonsDemoState extends State<ListButtonsDemo> {
                         isDisabled
                             ? GreyText(label)
                             : isSelected
-                                ? WhiteText(label)
-                                : Text(label),
+                            ? WhiteText(label)
+                            : Text(label),
                       ],
                     ),
                   );
@@ -485,10 +482,16 @@ class _ListButtonsDemoState extends State<ListButtonsDemo> {
                   _ColorItem(Color(0xff4b0082), 'Indigo'),
                   _ColorItem(Color(0xff8f008f), 'Violet'),
                 ],
-                builder: (BuildContext context, _ColorItem? item,
-                    bool isForMeasurementOnly) {
-                  return _buildColorItem(item!,
-                      isSelected: false, includeName: false);
+                builder: (
+                  BuildContext context,
+                  _ColorItem? item,
+                  bool isForMeasurementOnly,
+                ) {
+                  return _buildColorItem(
+                    item!,
+                    isSelected: false,
+                    includeName: false,
+                  );
                 },
                 itemBuilder: (
                   BuildContext context,

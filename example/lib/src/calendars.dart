@@ -39,10 +39,7 @@ class CalendarsDemo extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     BoldText('Basic'),
-                    Calendar(
-                      initialYear: 2021,
-                      initialMonth: 2,
-                    ),
+                    Calendar(initialYear: 2021, initialMonth: 2),
                   ],
                 ),
                 SizedBox(width: 10),
@@ -50,9 +47,7 @@ class CalendarsDemo extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     BoldText('Calendar Buttons'),
-                    CalendarButton(
-                      initialSelectedDate: CalendarDate.today(),
-                    ),
+                    CalendarButton(initialSelectedDate: CalendarDate.today()),
                   ],
                 ),
               ],

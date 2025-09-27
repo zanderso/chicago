@@ -20,22 +20,24 @@ import 'package:flutter/widgets.dart';
 
 import 'text.dart';
 
-typedef TableRowComparator = int Function(
-    Map<String, int> row1, Map<String, int> row2);
+typedef TableRowComparator =
+    int Function(Map<String, int> row1, Map<String, int> row2);
 
 final math.Random rand = math.Random();
 const int tableLength = 10000;
 
-final List<Map<String, int>> tableData =
-    List<Map<String, int>>.generate(tableLength, (int index) {
-  return <String, int>{
-    'i': index,
-    'a': rand.nextInt(20),
-    'b': rand.nextInt(100),
-    'c': rand.nextInt(500),
-    'd': rand.nextInt(10000),
-  };
-});
+final List<Map<String, int>> tableData = List<Map<String, int>>.generate(
+  tableLength,
+  (int index) {
+    return <String, int>{
+      'i': index,
+      'a': rand.nextInt(20),
+      'b': rand.nextInt(100),
+      'c': rand.nextInt(500),
+      'd': rand.nextInt(10000),
+    };
+  },
+);
 
 class TablesDemo extends StatelessWidget {
   const TablesDemo({Key? key}) : super(key: key);
@@ -85,10 +87,7 @@ class _SortableTableDemoState extends State<SortableTableDemo> {
     return TableColumn(
       key: key,
       width: ConstrainedTableColumnWidth(width: 48),
-      headerBuilder: (
-        BuildContext context,
-        int columnIndex,
-      ) {
+      headerBuilder: (BuildContext context, int columnIndex) {
         return Text(name);
       },
       cellBuilder: (
@@ -114,10 +113,7 @@ class _SortableTableDemoState extends State<SortableTableDemo> {
   static TableColumn _createFlexTableColumn() {
     return TableColumn(
       key: 'flex',
-      headerBuilder: (
-        BuildContext context,
-        int columnIndex,
-      ) {
+      headerBuilder: (BuildContext context, int columnIndex) {
         return Text('');
       },
       cellBuilder: (
@@ -159,31 +155,39 @@ class _SortableTableDemoState extends State<SortableTableDemo> {
     _scrollController = ScrollPaneController();
 
     _sortController['i'] = SortDirection.ascending;
-    _sortController.addListener(TableViewSortListener(
-      onChanged: (TableViewSortController controller) {
-        final String sortKey = controller.keys.first;
-        final SortDirection direction = controller[sortKey]!;
+    _sortController.addListener(
+      TableViewSortListener(
+        onChanged: (TableViewSortController controller) {
+          final String sortKey = controller.keys.first;
+          final SortDirection direction = controller[sortKey]!;
 
-        Map<String, int>? selectedItem;
-        if (_selectionController.selectedIndex != -1) {
-          selectedItem = tableData[_selectionController.selectedIndex];
-        }
+          Map<String, int>? selectedItem;
+          if (_selectionController.selectedIndex != -1) {
+            selectedItem = tableData[_selectionController.selectedIndex];
+          }
 
-        final TableRowComparator comparator =
-            _getTableRowComparator(sortKey, direction);
-        tableData.sort(comparator);
+          final TableRowComparator comparator = _getTableRowComparator(
+            sortKey,
+            direction,
+          );
+          tableData.sort(comparator);
 
-        if (selectedItem != null) {
-          int selectedIndex =
-              binarySearch(tableData, selectedItem, compare: comparator);
-          assert(selectedIndex >= 0);
-          _selectionController.selectedIndex = selectedIndex;
-          final Rect rowBounds =
-              _metricsController.metrics.getRowBounds(selectedIndex);
-          _scrollController.scrollToVisible(rowBounds);
-        }
-      },
-    ));
+          if (selectedItem != null) {
+            int selectedIndex = binarySearch(
+              tableData,
+              selectedItem,
+              compare: comparator,
+            );
+            assert(selectedIndex >= 0);
+            _selectionController.selectedIndex = selectedIndex;
+            final Rect rowBounds = _metricsController.metrics.getRowBounds(
+              selectedIndex,
+            );
+            _scrollController.scrollToVisible(rowBounds);
+          }
+        },
+      ),
+    );
   }
 
   @override
@@ -280,10 +284,7 @@ class _CustomTableDemoState extends State<CustomTableDemo> {
     );
   }
 
-  static Widget _buildIconHeader(
-    BuildContext context,
-    int columnIndex,
-  ) {
+  static Widget _buildIconHeader(BuildContext context, int columnIndex) {
     return Text('Icon');
   }
 
@@ -302,10 +303,7 @@ class _CustomTableDemoState extends State<CustomTableDemo> {
     return Image.asset(asset);
   }
 
-  static Widget _buildNameHeader(
-    BuildContext context,
-    int columnIndex,
-  ) {
+  static Widget _buildNameHeader(BuildContext context, int columnIndex) {
     return Text('Name');
   }
 
@@ -419,10 +417,7 @@ class _EditableTableDemoState extends State<EditableTableDemo> {
     'Bird',
   ];
 
-  static Widget _buildTypeHeader(
-    BuildContext context,
-    int columnIndex,
-  ) {
+  static Widget _buildTypeHeader(BuildContext context, int columnIndex) {
     return Text('Type');
   }
 
@@ -450,10 +445,7 @@ class _EditableTableDemoState extends State<EditableTableDemo> {
     }
   }
 
-  static Widget _buildNameHeader(
-    BuildContext context,
-    int columnIndex,
-  ) {
+  static Widget _buildNameHeader(BuildContext context, int columnIndex) {
     return Text('Name');
   }
 
@@ -468,9 +460,7 @@ class _EditableTableDemoState extends State<EditableTableDemo> {
     bool isRowDisabled,
   ) {
     if (isEditing) {
-      return TextInput(
-        controller: _textController,
-      );
+      return TextInput(controller: _textController);
     } else {
       final String text = _items[rowIndex].name;
       return Padding(
@@ -480,10 +470,7 @@ class _EditableTableDemoState extends State<EditableTableDemo> {
     }
   }
 
-  static Widget _buildFlexHeader(
-    BuildContext context,
-    int columnIndex,
-  ) {
+  static Widget _buildFlexHeader(BuildContext context, int columnIndex) {
     return Container();
   }
 
@@ -515,32 +502,35 @@ class _EditableTableDemoState extends State<EditableTableDemo> {
     ];
 
     int editingRowIndex = -1;
-    _editorController.addListener(TableViewEditorListener(
-      onPreviewEditStarted: (
-        TableViewEditorController controller,
-        int rowIndex,
-        int columnIndex,
-      ) {
-        _listButtonController.selectedIndex =
-            editableTableListButtonOptions.indexOf(_items[rowIndex].animal);
-        _textController.text = _items[rowIndex].name;
-        editingRowIndex = rowIndex;
-        return Vote.approve;
-      },
-      onEditFinished: (
-        TableViewEditorController controller,
-        TableViewEditOutcome outcome,
-      ) {
-        if (outcome == TableViewEditOutcome.saved) {
-          final String animal = editableTableListButtonOptions[
-              _listButtonController.selectedIndex];
-          final String name = _textController.text;
-          setState(() {
-            _items[editingRowIndex] = _EditableItem(animal, name);
-          });
-        }
-      },
-    ));
+    _editorController.addListener(
+      TableViewEditorListener(
+        onPreviewEditStarted: (
+          TableViewEditorController controller,
+          int rowIndex,
+          int columnIndex,
+        ) {
+          _listButtonController.selectedIndex = editableTableListButtonOptions
+              .indexOf(_items[rowIndex].animal);
+          _textController.text = _items[rowIndex].name;
+          editingRowIndex = rowIndex;
+          return Vote.approve;
+        },
+        onEditFinished: (
+          TableViewEditorController controller,
+          TableViewEditOutcome outcome,
+        ) {
+          if (outcome == TableViewEditOutcome.saved) {
+            final String animal =
+                editableTableListButtonOptions[_listButtonController
+                    .selectedIndex];
+            final String name = _textController.text;
+            setState(() {
+              _items[editingRowIndex] = _EditableItem(animal, name);
+            });
+          }
+        },
+      ),
+    );
   }
 
   @override
