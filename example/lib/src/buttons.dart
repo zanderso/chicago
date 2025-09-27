@@ -132,10 +132,7 @@ class BasicButtonsDemo extends StatelessWidget {
                   onPressed: _acknowledgeButtonPress(context),
                 ),
                 SizedBox(width: 4),
-                PushButton(
-                  label: 'House',
-                  icon: 'assets/house.png',
-                ),
+                PushButton(label: 'House', icon: 'assets/house.png'),
               ],
             ),
             SizedBox(height: 10),
@@ -155,10 +152,7 @@ class BasicButtonsDemo extends StatelessWidget {
                   onPressed: _acknowledgeButtonPress(context),
                 ),
                 SizedBox(width: 4),
-                PushButton(
-                  icon: 'assets/house.png',
-                  isToolbar: true,
-                ),
+                PushButton(icon: 'assets/house.png', isToolbar: true),
               ],
             ),
           ],
@@ -386,15 +380,9 @@ class _CheckboxesDemoState extends State<CheckboxesDemo> {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Checkbox(
-                  controller: _readController,
-                  trailing: Text('Read'),
-                ),
+                Checkbox(controller: _readController, trailing: Text('Read')),
                 SizedBox(height: 4),
-                Checkbox(
-                  controller: _writeController,
-                  trailing: Text('Write'),
-                ),
+                Checkbox(controller: _writeController, trailing: Text('Write')),
                 SizedBox(height: 4),
                 Checkbox(
                   controller: _executeController,

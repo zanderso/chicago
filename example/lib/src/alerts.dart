@@ -140,10 +140,7 @@ class _AlertsDemoState extends State<AlertsDemo> {
                   trailing: Text('Custom'),
                 ),
                 SizedBox(height: 6),
-                PushButton(
-                  label: 'Show Prompt',
-                  onPressed: _handleShowPrompt,
-                ),
+                PushButton(label: 'Show Prompt', onPressed: _handleShowPrompt),
               ],
             ),
           ),

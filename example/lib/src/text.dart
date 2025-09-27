@@ -45,10 +45,10 @@ class ColoredText extends StatelessWidget {
 
 class WhiteText extends ColoredText {
   const WhiteText(String text, {Key? key})
-      : super(text, const Color(0xffffffff), key: key);
+    : super(text, const Color(0xffffffff), key: key);
 }
 
 class GreyText extends ColoredText {
   const GreyText(String text, {Key? key})
-      : super(text, const Color(0xff999999), key: key);
+    : super(text, const Color(0xff999999), key: key);
 }

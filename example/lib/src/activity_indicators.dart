@@ -74,11 +74,7 @@ class MetersDemo extends StatelessWidget {
         ),
         SizedBox(height: 8),
         Row(
-          children: [
-            Meter(percentage: 0.75),
-            SizedBox(width: 6),
-            Text('75%'),
-          ],
+          children: [Meter(percentage: 0.75), SizedBox(width: 6), Text('75%')],
         ),
         SizedBox(height: 8),
         Row(
@@ -113,11 +109,7 @@ class ActivityIndicatorDemo extends StatelessWidget {
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: const <Widget>[
-            SizedBox(
-              width: 24,
-              height: 24,
-              child: ActivityIndicator(),
-            ),
+            SizedBox(width: 24, height: 24, child: ActivityIndicator()),
             SizedBox(
               width: 48,
               height: 48,
