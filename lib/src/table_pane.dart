@@ -30,7 +30,10 @@ void main() {
       child: Directionality(
         textDirection: TextDirection.ltr,
         child: DefaultTextStyle(
-          style: TextStyle(fontFamily: 'Verdana', color: const Color(0xff000000)),
+          style: TextStyle(
+            fontFamily: 'Verdana',
+            color: const Color(0xff000000),
+          ),
           child: TablePane(
             verticalIntrinsicSize: MainAxisSize.min,
             horizontalSpacing: 5,
@@ -58,10 +61,7 @@ void main() {
               TableRow(
                 children: [
                   ColoredCell(),
-                  TableCell(
-                    rowSpan: 2,
-                    child: ColoredCell(text: 'rowSpan=2'),
-                  ),
+                  TableCell(rowSpan: 2, child: ColoredCell(text: 'rowSpan=2')),
                   ColoredCell(),
                   ColoredCell(),
                   ColoredCell(),
@@ -138,14 +138,13 @@ class ColoredCell extends StatelessWidget {
   }
 }
 
-typedef _IntrinsicComputer = double Function(RenderBox child, double crossAxisConstraint);
+typedef _IntrinsicComputer =
+    double Function(RenderBox child, double crossAxisConstraint);
 
 double _sum(double a, double b) => a + b;
 
 class TablePaneColumn with Diagnosticable {
-  const TablePaneColumn({
-    this.width = const RelativeTablePaneColumnWidth(),
-  });
+  const TablePaneColumn({this.width = const RelativeTablePaneColumnWidth()});
 
   final TablePaneColumnWidth width;
 
@@ -174,7 +173,8 @@ abstract class TablePaneColumnWidth with Diagnosticable {
 }
 
 class IntrinsicTablePaneColumnWidth extends TablePaneColumnWidth {
-  const IntrinsicTablePaneColumnWidth([this.mainAxisSize = MainAxisSize.max]) : super._();
+  const IntrinsicTablePaneColumnWidth([this.mainAxisSize = MainAxisSize.max])
+    : super._();
 
   final MainAxisSize mainAxisSize;
 
@@ -188,9 +188,7 @@ class IntrinsicTablePaneColumnWidth extends TablePaneColumnWidth {
 }
 
 class FixedTablePaneColumnWidth extends TablePaneColumnWidth {
-  const FixedTablePaneColumnWidth(this.width)
-      : assert(width >= 0),
-        super._();
+  const FixedTablePaneColumnWidth(this.width) : assert(width >= 0), super._();
 
   @override
   @protected
@@ -226,7 +224,8 @@ abstract class TablePaneRowHeight {
 }
 
 class IntrinsicTablePaneRowHeight extends TablePaneRowHeight {
-  const IntrinsicTablePaneRowHeight([this.mainAxisSize = MainAxisSize.max]) : super._();
+  const IntrinsicTablePaneRowHeight([this.mainAxisSize = MainAxisSize.max])
+    : super._();
 
   final MainAxisSize mainAxisSize;
 
@@ -240,9 +239,7 @@ class IntrinsicTablePaneRowHeight extends TablePaneRowHeight {
 }
 
 class FixedTablePaneRowHeight extends TablePaneRowHeight {
-  const FixedTablePaneRowHeight(this.height)
-      : assert(height >= 0),
-        super._();
+  const FixedTablePaneRowHeight(this.height) : assert(height >= 0), super._();
 
   @override
   @protected
@@ -287,7 +284,8 @@ class TableCell extends ParentDataWidget<TableCellParentData> {
 
   @override
   void applyParentData(RenderObject renderObject) {
-    final TableCellParentData parentData = renderObject.parentData as TableCellParentData;
+    final TableCellParentData parentData =
+        renderObject.parentData as TableCellParentData;
     if (parentData.rowSpan != rowSpan || parentData.columnSpan != columnSpan) {
       parentData.rowSpan = rowSpan;
       parentData.columnSpan = columnSpan;
@@ -316,7 +314,8 @@ class EmptyTableCell extends LeafRenderObjectWidget {
   const EmptyTableCell({Key? key}) : super(key: key);
 
   @override
-  RenderObject createRenderObject(BuildContext context) => RenderEmptyTableCell();
+  RenderObject createRenderObject(BuildContext context) =>
+      RenderEmptyTableCell();
 }
 
 /// TablePane's layout is "width in, height out", meaning it will compute its
@@ -465,10 +464,7 @@ class TableRow extends MultiChildRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return RenderTableRow(
-      height: height,
-      backgroundColor: backgroundColor,
-    );
+    return RenderTableRow(height: height, backgroundColor: backgroundColor);
   }
 
   @override
@@ -506,7 +502,8 @@ class TableCellParentData extends ContainerBoxParentData<RenderBox> {
   }
 
   @override
-  String toString() => '${super.toString()}; $rowSpan rows x $columnSpan columns';
+  String toString() =>
+      '${super.toString()}; $rowSpan rows x $columnSpan columns';
 }
 
 class TableRowConstraints extends BoxConstraints {
@@ -541,7 +538,11 @@ class TableRowConstraints extends BoxConstraints {
   @override
   int get hashCode {
     assert(debugAssertIsValid());
-    return Object.hash(super.hashCode, Object.hashAll(cellConstraints), Object.hashAll(cellPositions));
+    return Object.hash(
+      super.hashCode,
+      Object.hashAll(cellConstraints),
+      Object.hashAll(cellPositions),
+    );
   }
 
   @override
@@ -562,8 +563,10 @@ class RenderEmptyTableCell extends RenderBox {
   }
 }
 
-mixin ChildListRenderObjectMixin<ChildType extends RenderBox,
-        ParentDataType extends ContainerBoxParentData<ChildType>>
+mixin ChildListRenderObjectMixin<
+  ChildType extends RenderBox,
+  ParentDataType extends ContainerBoxParentData<ChildType>
+>
     on RenderBoxContainerDefaultsMixin<ChildType, ParentDataType> {
   List<RenderBox>? _children;
 
@@ -614,10 +617,7 @@ class RenderTableRow extends RenderBox
         ContainerRenderObjectMixin<RenderBox, TableCellParentData>,
         RenderBoxContainerDefaultsMixin<RenderBox, TableCellParentData>,
         ChildListRenderObjectMixin<RenderBox, TableCellParentData> {
-  RenderTableRow({
-    required TablePaneRowHeight height,
-    Color? backgroundColor,
-  }) {
+  RenderTableRow({required TablePaneRowHeight height, Color? backgroundColor}) {
     this.height = height;
     this.backgroundColor = backgroundColor;
   }
@@ -644,7 +644,8 @@ class RenderTableRow extends RenderBox
   }
 
   @override
-  TableRowConstraints get constraints => super.constraints as TableRowConstraints;
+  TableRowConstraints get constraints =>
+      super.constraints as TableRowConstraints;
 
   @override
   RenderTablePane? get parent => super.parent as RenderTablePane?;
@@ -696,8 +697,11 @@ class RenderTableRow extends RenderBox
   @override
   void paint(PaintingContext context, Offset offset) {
     if (backgroundColor != null) {
-     final Paint paint = Paint()..style = PaintingStyle.fill..color = backgroundColor!;
-     context.canvas.drawRect(offset & size, paint);
+      final Paint paint =
+          Paint()
+            ..style = PaintingStyle.fill
+            ..color = backgroundColor!;
+      context.canvas.drawRect(offset & size, paint);
     }
     defaultPaint(context, offset);
   }
@@ -828,9 +832,13 @@ class RenderTablePane extends RenderBox
     double result = 0;
     for (int j = 0, n = row.length, m = columns.length; j < n && j < m; j++) {
       final RenderBox child = row[j];
-      final TableCellParentData childParentData = child.parentData as TableCellParentData;
+      final TableCellParentData childParentData =
+          child.parentData as TableCellParentData;
       if (childParentData.rowSpan == 1) {
-        result = math.max(result, computeIntrinsicCellHeight(child, columnWidths[j]));
+        result = math.max(
+          result,
+          computeIntrinsicCellHeight(child, columnWidths[j]),
+        );
       }
     }
     return result;
@@ -852,9 +860,13 @@ class RenderTablePane extends RenderBox
       final RenderTableRow row = rows[i];
       if (columnIndex < row.length) {
         final RenderBox child = row[columnIndex];
-        final TableCellParentData childParentData = child.parentData as TableCellParentData;
+        final TableCellParentData childParentData =
+            child.parentData as TableCellParentData;
         if (childParentData.columnSpan == 1) {
-          result = math.max(result, computeIntrinsicCellWidth(child, double.infinity));
+          result = math.max(
+            result,
+            computeIntrinsicCellWidth(child, double.infinity),
+          );
         }
       }
     }
@@ -868,10 +880,14 @@ class RenderTablePane extends RenderBox
     assert(!width.isNegative);
     final List<double> rowHeights = List<double>.filled(rows.length, 0);
     final List<double> relativeWeights = List<double>.filled(rows.length, 0);
-    final List<bool> intrinsicHeightRows = List<bool>.filled(rows.length, false);
-    final List<double> columnWidths = width.isFinite
-        ? _computeActualColumnWidths(LinearConstraints.tight(width))
-        : _computeIntrinsicColumnWidths(_computeIntrinsicChildWidth);
+    final List<bool> intrinsicHeightRows = List<bool>.filled(
+      rows.length,
+      false,
+    );
+    final List<double> columnWidths =
+        width.isFinite
+            ? _computeActualColumnWidths(LinearConstraints.tight(width))
+            : _computeIntrinsicColumnWidths(_computeIntrinsicChildWidth);
 
     // First, we calculate the base heights of the rows, giving relative
     // rows their intrinsic height. Spanning cells will be ignored in this
@@ -889,7 +905,11 @@ class RenderTablePane extends RenderBox
       }
 
       if (isIntrinsic || isRelative) {
-        rowHeights[i] = _computeIntrinsicRowHeight(i, columnWidths, computeIntrinsicCellHeight);
+        rowHeights[i] = _computeIntrinsicRowHeight(
+          i,
+          columnWidths,
+          computeIntrinsicCellHeight,
+        );
       } else {
         rowHeights[i] = rowHeight;
       }
@@ -905,7 +925,8 @@ class RenderTablePane extends RenderBox
         final RenderBox child = row[j];
 
         if (child is! RenderEmptyTableCell) {
-          final TableCellParentData childParentData = child.parentData as TableCellParentData;
+          final TableCellParentData childParentData =
+              child.parentData as TableCellParentData;
           final int rowSpan = childParentData.rowSpan;
 
           if (rowSpan > 1) {
@@ -924,11 +945,18 @@ class RenderTablePane extends RenderBox
               }
             }
 
-            if (spannedRelativeWeight > 0 || spannedIntrinsicHeightCellCount > 0) {
+            if (spannedRelativeWeight > 0 ||
+                spannedIntrinsicHeightCellCount > 0) {
               final int columnSpan = childParentData.columnSpan;
-              double childWidth = columnWidths.skip(j).take(columnSpan).fold<double>(0, _sum);
+              double childWidth = columnWidths
+                  .skip(j)
+                  .take(columnSpan)
+                  .fold<double>(0, _sum);
               childWidth += math.max(columnSpan - 1, 0) * horizontalSpacing;
-              final double childIntrinsicHeight = computeIntrinsicCellHeight(child, childWidth);
+              final double childIntrinsicHeight = computeIntrinsicCellHeight(
+                child,
+                childWidth,
+              );
 
               if (childIntrinsicHeight > spannedHeight) {
                 // The child's intrinsic height is larger than the height we've
@@ -939,11 +967,13 @@ class RenderTablePane extends RenderBox
                   // We'll distribute the adjustment across the spanned
                   // relative rows and adjust other relative row heights to
                   // keep all relative row heights reconciled.
-                  final double unitAdjustment = adjustment / spannedRelativeWeight;
+                  final double unitAdjustment =
+                      adjustment / spannedRelativeWeight;
                   for (int k = 0; k < rowSpan && i + k < rows.length; k++) {
                     final double relativeWeight = relativeWeights[i + k];
                     if (relativeWeight > 0) {
-                      final double rowAdjustment = unitAdjustment * relativeWeight;
+                      final double rowAdjustment =
+                          unitAdjustment * relativeWeight;
                       rowHeights[i + k] += rowAdjustment;
                     }
                   }
@@ -952,7 +982,8 @@ class RenderTablePane extends RenderBox
                   // intrinsic-height rows.
                   for (int k = 0; k < rowSpan && i + k < rows.length; k++) {
                     if (intrinsicHeightRows[i + k]) {
-                      final double rowAdjustment = adjustment / spannedIntrinsicHeightCellCount;
+                      final double rowAdjustment =
+                          adjustment / spannedIntrinsicHeightCellCount;
                       rowHeights[i + k] += rowAdjustment;
                     }
                   }
@@ -975,7 +1006,10 @@ class RenderTablePane extends RenderBox
         if (relativeWeight > 0) {
           final double rowHeight = rowHeights[i];
           final double weightPercentage = relativeWeight / totalRelativeWeight;
-          totalRelativeHeight = math.max(totalRelativeHeight, rowHeight / weightPercentage);
+          totalRelativeHeight = math.max(
+            totalRelativeHeight,
+            rowHeight / weightPercentage,
+          );
         }
       }
 
@@ -999,11 +1033,16 @@ class RenderTablePane extends RenderBox
     final double totalRelativeWeight = rows
         .map<TablePaneRowHeight>((RenderTableRow row) => row.height)
         .whereType<RelativeTablePaneRowHeight>()
-        .map<double>((RelativeTablePaneRowHeight heightSpec) => heightSpec.height)
+        .map<double>(
+          (RelativeTablePaneRowHeight heightSpec) => heightSpec.height,
+        )
         .fold<double>(0, _sum);
 
     final double totalWidth = _computeWidth(columnWidths);
-    final List<double> rowHeights = _computeIntrinsicRowHeights(totalWidth, _computeIntrinsicChildHeight);
+    final List<double> rowHeights = _computeIntrinsicRowHeights(
+      totalWidth,
+      _computeIntrinsicChildHeight,
+    );
     double totalHeight = _computeHeight(rowHeights);
 
     void growRelativeRowsToMeetMinimumTotalHeight(double minimumHeight) {
@@ -1039,11 +1078,14 @@ class RenderTablePane extends RenderBox
           final TablePaneRowHeight rowHeightSpec = rows[i].height;
           if (rowHeightSpec.isRelative) {
             final double relativeWeight = rowHeightSpec.height;
-            final double weightPercentage = relativeWeight / totalRelativeWeight;
+            final double weightPercentage =
+                relativeWeight / totalRelativeWeight;
             assert(weightPercentage > 0 && weightPercentage <= 1);
             double subtractHeight = overflowHeight * weightPercentage;
             final bool localOverflow = subtractHeight > rowHeights[i];
-            assert(excessiveOverflow == null || excessiveOverflow == localOverflow);
+            assert(
+              excessiveOverflow == null || excessiveOverflow == localOverflow,
+            );
             excessiveOverflow = (excessiveOverflow ?? false) || localOverflow;
             if (excessiveOverflow) {
               subtractHeight = rowHeights[i];
@@ -1072,11 +1114,16 @@ class RenderTablePane extends RenderBox
           ErrorSummary('RenderTablePane computed a negative-height row.'),
           ErrorDescription('This indicates a bug in RenderTablePane.'),
           ErrorSpacer(),
-          DiagnosticsProperty<List<double>>('The computed row heights were', rowHeights),
+          DiagnosticsProperty<List<double>>(
+            'The computed row heights were',
+            rowHeights,
+          ),
           ErrorSpacer(),
           DiagnosticsProperty<Object>(
-              'The RenderTablePane in question was created by', debugCreator,
-              style: DiagnosticsTreeStyle.errorProperty),
+            'The RenderTablePane in question was created by',
+            debugCreator,
+            style: DiagnosticsTreeStyle.errorProperty,
+          ),
         ]);
       }
       return true;
@@ -1085,10 +1132,15 @@ class RenderTablePane extends RenderBox
     return rowHeights;
   }
 
-  List<double> _computeIntrinsicColumnWidths(_IntrinsicComputer computeIntrinsicCellWidth) {
+  List<double> _computeIntrinsicColumnWidths(
+    _IntrinsicComputer computeIntrinsicCellWidth,
+  ) {
     final List<double> columnWidths = List<double>.filled(columns.length, 0);
     final List<double> relativeWeights = List<double>.filled(columns.length, 0);
-    final List<bool> intrinsicWidthColumns = List<bool>.filled(columns.length, false);
+    final List<bool> intrinsicWidthColumns = List<bool>.filled(
+      columns.length,
+      false,
+    );
 
     // First, we calculate the base widths of the columns, giving relative
     // columns their intrinsic width. Spanning cells will be ignored in this
@@ -1106,7 +1158,10 @@ class RenderTablePane extends RenderBox
       }
 
       if (isIntrinsic || isRelative) {
-        columnWidths[i] = _computeIntrinsicColumnWidth(i, computeIntrinsicCellWidth);
+        columnWidths[i] = _computeIntrinsicColumnWidth(
+          i,
+          computeIntrinsicCellWidth,
+        );
       } else {
         columnWidths[i] = columnWidth;
       }
@@ -1122,7 +1177,8 @@ class RenderTablePane extends RenderBox
         final RenderBox child = row[j];
 
         if (child is! RenderEmptyTableCell) {
-          final TableCellParentData childParentData = child.parentData as TableCellParentData;
+          final TableCellParentData childParentData =
+              child.parentData as TableCellParentData;
           final int columnSpan = childParentData.columnSpan;
 
           if (columnSpan > 1) {
@@ -1141,7 +1197,8 @@ class RenderTablePane extends RenderBox
               }
             }
 
-            if (spannedRelativeWeight > 0 || spannedIntrinsicWidthCellCount > 0) {
+            if (spannedRelativeWeight > 0 ||
+                spannedIntrinsicWidthCellCount > 0) {
               bool isRelativeOrIntrinsic(TablePaneRowHeight spec) {
                 return spec.isRelative || spec.height.isNegative;
               }
@@ -1162,10 +1219,15 @@ class RenderTablePane extends RenderBox
                   heightConstraint = spannedRowHeights
                       .map<double>((TablePaneRowHeight spec) => spec.height)
                       .fold<double>(0, _sum);
-                  heightConstraint += math.max(spannedRowHeights.length - 1, 0) * verticalSpacing;
+                  heightConstraint +=
+                      math.max(spannedRowHeights.length - 1, 0) *
+                      verticalSpacing;
                 }
               }
-              final double childIntrinsicWidth = computeIntrinsicCellWidth(child, heightConstraint);
+              final double childIntrinsicWidth = computeIntrinsicCellWidth(
+                child,
+                heightConstraint,
+              );
 
               if (childIntrinsicWidth > spannedWidth) {
                 // The child's intrinsic width is larger than the width we've
@@ -1176,20 +1238,31 @@ class RenderTablePane extends RenderBox
                   // We'll distribute the adjustment across the spanned
                   // relative columns and adjust other relative column widths
                   // to keep all relative column widths reconciled.
-                  final double unitAdjustment = adjustment / spannedRelativeWeight;
-                  for (int k = 0; k < columnSpan && j + k < columns.length; k++) {
+                  final double unitAdjustment =
+                      adjustment / spannedRelativeWeight;
+                  for (
+                    int k = 0;
+                    k < columnSpan && j + k < columns.length;
+                    k++
+                  ) {
                     final double relativeWeight = relativeWeights[j + k];
                     if (relativeWeight > 0) {
-                      final double columnAdjustment = unitAdjustment * relativeWeight;
+                      final double columnAdjustment =
+                          unitAdjustment * relativeWeight;
                       columnWidths[j + k] += columnAdjustment;
                     }
                   }
                 } else {
                   // We'll distribute the adjustment evenly among the
                   // intrinsic-width columns.
-                  for (int k = 0; k < columnSpan && j + k < columns.length; k++) {
+                  for (
+                    int k = 0;
+                    k < columnSpan && j + k < columns.length;
+                    k++
+                  ) {
                     if (intrinsicWidthColumns[j + k]) {
-                      final double columnAdjustment = adjustment / spannedIntrinsicWidthCellCount;
+                      final double columnAdjustment =
+                          adjustment / spannedIntrinsicWidthCellCount;
                       columnWidths[j + k] += columnAdjustment;
                     }
                   }
@@ -1212,7 +1285,10 @@ class RenderTablePane extends RenderBox
         if (relativeWeight > 0) {
           final double columnWidth = columnWidths[i];
           final double weightPercentage = relativeWeight / totalRelativeWeight;
-          totalRelativeWidth = math.max(totalRelativeWidth, columnWidth / weightPercentage);
+          totalRelativeWidth = math.max(
+            totalRelativeWidth,
+            columnWidth / weightPercentage,
+          );
         }
       }
 
@@ -1233,10 +1309,14 @@ class RenderTablePane extends RenderBox
     final double totalRelativeWeight = columns
         .map<TablePaneColumnWidth>((TablePaneColumn column) => column.width)
         .whereType<RelativeTablePaneColumnWidth>()
-        .map<double>((RelativeTablePaneColumnWidth widthSpec) => widthSpec.width)
+        .map<double>(
+          (RelativeTablePaneColumnWidth widthSpec) => widthSpec.width,
+        )
         .fold<double>(0, _sum);
 
-    final List<double> columnWidths = _computeIntrinsicColumnWidths(_computeIntrinsicChildWidth);
+    final List<double> columnWidths = _computeIntrinsicColumnWidths(
+      _computeIntrinsicChildWidth,
+    );
     double totalWidth = _computeWidth(columnWidths);
 
     void growRelativeColumnsToMeetMinimumTotalWidth(double minimumWidth) {
@@ -1272,11 +1352,14 @@ class RenderTablePane extends RenderBox
           final TablePaneColumnWidth columnWidthSpec = columns[j].width;
           if (columnWidthSpec.isRelative) {
             final double relativeWeight = columnWidthSpec.width;
-            final double weightPercentage = relativeWeight / totalRelativeWeight;
+            final double weightPercentage =
+                relativeWeight / totalRelativeWeight;
             assert(weightPercentage > 0 && weightPercentage <= 1);
             double subtractWidth = overflowWidth * weightPercentage;
             final bool localOverflow = subtractWidth > columnWidths[j];
-            assert(excessiveOverflow == null || excessiveOverflow == localOverflow);
+            assert(
+              excessiveOverflow == null || excessiveOverflow == localOverflow,
+            );
             excessiveOverflow = (excessiveOverflow ?? false) || localOverflow;
             if (excessiveOverflow) {
               subtractWidth = columnWidths[j];
@@ -1305,11 +1388,16 @@ class RenderTablePane extends RenderBox
           ErrorSummary('RenderTablePane computed a negative-width column.'),
           ErrorDescription('This indicates a bug in RenderTablePane.'),
           ErrorSpacer(),
-          DiagnosticsProperty<List<double>>('The computed column widths were', columnWidths),
+          DiagnosticsProperty<List<double>>(
+            'The computed column widths were',
+            columnWidths,
+          ),
           ErrorSpacer(),
           DiagnosticsProperty<Object>(
-              'The RenderTablePane in question was created by', debugCreator,
-              style: DiagnosticsTreeStyle.errorProperty),
+            'The RenderTablePane in question was created by',
+            debugCreator,
+            style: DiagnosticsTreeStyle.errorProperty,
+          ),
         ]);
       }
       return true;
@@ -1319,11 +1407,17 @@ class RenderTablePane extends RenderBox
   }
 
   double _computeHeight(List<double> rowHeights) {
-    return rowHeights.fold<double>(0, _sum) + math.max(rows.length - 1, 0) * verticalSpacing;
+    return rowHeights.fold<double>(0, _sum) +
+        math.max(rows.length - 1, 0) * verticalSpacing;
   }
 
-  double _computeIntrinsicHeight(double width, _IntrinsicComputer computeIntrinsicCellHeight) {
-    return _computeHeight(_computeIntrinsicRowHeights(width, computeIntrinsicCellHeight));
+  double _computeIntrinsicHeight(
+    double width,
+    _IntrinsicComputer computeIntrinsicCellHeight,
+  ) {
+    return _computeHeight(
+      _computeIntrinsicRowHeights(width, computeIntrinsicCellHeight),
+    );
   }
 
   double _computeIntrinsicChildHeight(RenderBox child, double width) {
@@ -1344,11 +1438,17 @@ class RenderTablePane extends RenderBox
   }
 
   double _computeWidth(List<double> columnWidths) {
-    return columnWidths.fold<double>(0, _sum) + math.max(columns.length - 1, 0) * horizontalSpacing;
+    return columnWidths.fold<double>(0, _sum) +
+        math.max(columns.length - 1, 0) * horizontalSpacing;
   }
 
-  double _computeIntrinsicWidth(double height, _IntrinsicComputer computeIntrinsicCellWidth) {
-    return _computeWidth(_computeIntrinsicColumnWidths(computeIntrinsicCellWidth));
+  double _computeIntrinsicWidth(
+    double height,
+    _IntrinsicComputer computeIntrinsicCellWidth,
+  ) {
+    return _computeWidth(
+      _computeIntrinsicColumnWidths(computeIntrinsicCellWidth),
+    );
   }
 
   double _computeIntrinsicChildWidth(RenderBox child, double height) {
@@ -1473,36 +1573,54 @@ class RenderTablePane extends RenderBox
     assert(() {
       if (rows.isNotEmpty) {
         final int cellsPerRow = rows.first.children.length;
-        if (rows.any((RenderTableRow row) => row.children.length != cellsPerRow)) {
+        if (rows.any(
+          (RenderTableRow row) => row.children.length != cellsPerRow,
+        )) {
           final Iterable<int> rowLengths = rows.map<int>((RenderTableRow row) {
             return row.length;
           });
           throw FlutterError.fromParts(<DiagnosticsNode>[
             ErrorSummary('RenderTablePane contains irregular row lengths.'),
-            ErrorDescription('Every TableRow in a TablePane must have the same number of '
-                'children, so that every table cell is filled. Otherwise, the table will '
-                'contain holes.'),
-            ErrorDescription('The counts of cells per row in this TablePane were: $rowLengths'),
+            ErrorDescription(
+              'Every TableRow in a TablePane must have the same number of '
+              'children, so that every table cell is filled. Otherwise, the table will '
+              'contain holes.',
+            ),
+            ErrorDescription(
+              'The counts of cells per row in this TablePane were: $rowLengths',
+            ),
             ErrorSpacer(),
             DiagnosticsProperty<Object>(
-                'The RenderTablePane in question was created by', debugCreator,
-                style: DiagnosticsTreeStyle.errorProperty),
+              'The RenderTablePane in question was created by',
+              debugCreator,
+              style: DiagnosticsTreeStyle.errorProperty,
+            ),
           ]);
         }
         if (cellsPerRow != columns.length) {
           throw FlutterError.fromParts(<DiagnosticsNode>[
             ErrorSummary('RenderTablePane cells do not match columns.'),
-            ErrorDescription('The number of children inside every TableRow must match the '
-                'number of columns specified for the TablePane.'),
+            ErrorDescription(
+              'The number of children inside every TableRow must match the '
+              'number of columns specified for the TablePane.',
+            ),
             ErrorSpacer(),
-            IntProperty('The number of cells in each row was', cellsPerRow,
-                style: DiagnosticsTreeStyle.errorProperty),
-            IntProperty('The number of columns was', columns.length,
-                style: DiagnosticsTreeStyle.errorProperty),
+            IntProperty(
+              'The number of cells in each row was',
+              cellsPerRow,
+              style: DiagnosticsTreeStyle.errorProperty,
+            ),
+            IntProperty(
+              'The number of columns was',
+              columns.length,
+              style: DiagnosticsTreeStyle.errorProperty,
+            ),
             ErrorSpacer(),
             DiagnosticsProperty<Object>(
-                'The RenderTablePane in question was created by', debugCreator,
-                style: DiagnosticsTreeStyle.errorProperty),
+              'The RenderTablePane in question was created by',
+              debugCreator,
+              style: DiagnosticsTreeStyle.errorProperty,
+            ),
           ]);
         }
       }
@@ -1525,20 +1643,35 @@ class RenderTablePane extends RenderBox
           cellConstraints.add(BoxConstraints.tight(Size.zero));
           cellPositions.add(Offset(childX, 0));
         } else {
-          final TableCellParentData childParentData = child.parentData as TableCellParentData;
+          final TableCellParentData childParentData =
+              child.parentData as TableCellParentData;
 
-          final int columnSpan = math.min(childParentData.columnSpan, columns.length - j);
-          double childWidth = metrics.columnWidths.skip(j).take(columnSpan).fold<double>(0, _sum);
+          final int columnSpan = math.min(
+            childParentData.columnSpan,
+            columns.length - j,
+          );
+          double childWidth = metrics.columnWidths
+              .skip(j)
+              .take(columnSpan)
+              .fold<double>(0, _sum);
           childWidth += (columnSpan - 1) * horizontalSpacing;
 
-          final int rowSpan = math.min(childParentData.rowSpan, rows.length - i);
-          double childHeight = metrics.rowHeights.skip(i).take(rowSpan).fold<double>(0, _sum);
+          final int rowSpan = math.min(
+            childParentData.rowSpan,
+            rows.length - i,
+          );
+          double childHeight = metrics.rowHeights
+              .skip(i)
+              .take(rowSpan)
+              .fold<double>(0, _sum);
           childHeight += (rowSpan - 1) * verticalSpacing;
 
           // Set the child's size
           childWidth = math.max(childWidth, 0);
           childHeight = math.max(childHeight, 0);
-          cellConstraints.add(BoxConstraints.tightFor(width: childWidth, height: childHeight));
+          cellConstraints.add(
+            BoxConstraints.tightFor(width: childWidth, height: childHeight),
+          );
           cellPositions.add(Offset(childX, 0));
 
           expandedRowWidth = math.max(expandedRowWidth, childX + childWidth);
@@ -1548,14 +1681,17 @@ class RenderTablePane extends RenderBox
         childX += (metrics.columnWidths[j] + horizontalSpacing);
       }
 
-      row.layout(TableRowConstraints.tightFor(
-        width: expandedRowWidth,
-        height: expandedRowHeight,
-        cellConstraints: cellConstraints,
-        cellPositions: cellPositions,
-      ));
+      row.layout(
+        TableRowConstraints.tightFor(
+          width: expandedRowWidth,
+          height: expandedRowHeight,
+          cellConstraints: cellConstraints,
+          cellPositions: cellPositions,
+        ),
+      );
 
-      final TableRowParentData rowParentData = row.parentData as TableRowParentData;
+      final TableRowParentData rowParentData =
+          row.parentData as TableRowParentData;
       rowParentData.offset = Offset(0, childY);
       childY += (metrics.rowHeights[i] + verticalSpacing);
     }
@@ -1572,11 +1708,30 @@ class RenderTablePane extends RenderBox
     super.debugFillProperties(properties);
     properties.add(DoubleProperty('horizontalSpacing', horizontalSpacing));
     properties.add(DoubleProperty('verticalSpacing', verticalSpacing));
-    properties.add(EnumProperty<MainAxisSize>('horizontalIntrinsicSize', horizontalIntrinsicSize));
-    properties.add(EnumProperty<MainAxisSize>('horizontalRelativeSize', horizontalRelativeSize));
-    properties.add(EnumProperty<MainAxisSize>('verticalIntrinsicSize', verticalIntrinsicSize));
-    properties.add(EnumProperty<MainAxisSize>('verticalRelativeSize', verticalRelativeSize));
-    properties.add(DiagnosticsProperty<_TablePaneMetrics?>('metrics', _metrics));
+    properties.add(
+      EnumProperty<MainAxisSize>(
+        'horizontalIntrinsicSize',
+        horizontalIntrinsicSize,
+      ),
+    );
+    properties.add(
+      EnumProperty<MainAxisSize>(
+        'horizontalRelativeSize',
+        horizontalRelativeSize,
+      ),
+    );
+    properties.add(
+      EnumProperty<MainAxisSize>(
+        'verticalIntrinsicSize',
+        verticalIntrinsicSize,
+      ),
+    );
+    properties.add(
+      EnumProperty<MainAxisSize>('verticalRelativeSize', verticalRelativeSize),
+    );
+    properties.add(
+      DiagnosticsProperty<_TablePaneMetrics?>('metrics', _metrics),
+    );
   }
 }
 
@@ -1600,7 +1755,8 @@ class TablePaneMetricsController extends ChangeNotifier {
     notifyListeners();
   }
 
-  bool get hasMetrics => _renderObject != null && _renderObject!._metrics != null;
+  bool get hasMetrics =>
+      _renderObject != null && _renderObject!._metrics != null;
 
   int? getRowAt(double y) {
     assert(hasMetrics);
@@ -1624,7 +1780,8 @@ class TablePaneMetricsController extends ChangeNotifier {
     if (row < 0 || row >= rowHeights.length) {
       return null;
     }
-    final double top = rowHeights.take(row).fold<double>(0, _sum) + row * verticalSpacing;
+    final double top =
+        rowHeights.take(row).fold<double>(0, _sum) + row * verticalSpacing;
     return Rect.fromLTWH(0, top, _renderObject!.size.width, rowHeights[row]);
   }
 
@@ -1650,20 +1807,40 @@ class TablePaneMetricsController extends ChangeNotifier {
     if (column < 0 || column >= columnWidths.length) {
       return null;
     }
-    final double left = columnWidths.take(column).fold<double>(0, _sum) + column * horizontalSpacing;
-    return Rect.fromLTWH(left, 0, columnWidths[column], _renderObject!.size.height);
+    final double left =
+        columnWidths.take(column).fold<double>(0, _sum) +
+        column * horizontalSpacing;
+    return Rect.fromLTWH(
+      left,
+      0,
+      columnWidths[column],
+      _renderObject!.size.height,
+    );
   }
 }
 
 class _TablePaneMetrics with Diagnosticable {
-  const _TablePaneMetrics._(this.constraints, this.columnWidths, this.rowHeights);
+  const _TablePaneMetrics._(
+    this.constraints,
+    this.columnWidths,
+    this.rowHeights,
+  );
 
   factory _TablePaneMetrics(RenderTablePane tablePane) {
     final BoxConstraints constraints = tablePane.constraints;
-    final LinearConstraints widthConstraints = LinearConstraints.width(constraints);
-    final LinearConstraints heightConstraints = LinearConstraints.height(constraints);
-    List<double> columnWidths = tablePane._computeActualColumnWidths(widthConstraints);
-    List<double> rowHeights = tablePane._computeActualRowHeights(heightConstraints, columnWidths);
+    final LinearConstraints widthConstraints = LinearConstraints.width(
+      constraints,
+    );
+    final LinearConstraints heightConstraints = LinearConstraints.height(
+      constraints,
+    );
+    List<double> columnWidths = tablePane._computeActualColumnWidths(
+      widthConstraints,
+    );
+    List<double> rowHeights = tablePane._computeActualRowHeights(
+      heightConstraints,
+      columnWidths,
+    );
     return _TablePaneMetrics._(constraints, columnWidths, rowHeights);
   }
 
@@ -1675,8 +1852,12 @@ class _TablePaneMetrics with Diagnosticable {
   @protected
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<BoxConstraints>('constraints', constraints));
-    properties.add(DiagnosticsProperty<List<double>>('columnWidths', columnWidths));
+    properties.add(
+      DiagnosticsProperty<BoxConstraints>('constraints', constraints),
+    );
+    properties.add(
+      DiagnosticsProperty<List<double>>('columnWidths', columnWidths),
+    );
     properties.add(DiagnosticsProperty<List<double>>('rowHeights', rowHeights));
   }
 }

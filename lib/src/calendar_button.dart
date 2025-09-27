@@ -49,11 +49,7 @@ class CalendarButton extends StatefulWidget {
 }
 
 /// Enum that specifies how a [CalendarButton] will calculate its width.
-enum CalendarButtonWidth {
-  expand,
-
-  shrinkWrap,
-}
+enum CalendarButtonWidth { expand, shrinkWrap }
 
 class _CalendarButtonState extends State<CalendarButton> {
   CalendarSelectionController? _selectionController;
@@ -77,29 +73,41 @@ class _CalendarButtonState extends State<CalendarButton> {
       if (overlayState == null) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
           ErrorSummary('No overlay found in widget ancestry.'),
-          ErrorDescription('Usually the Navigator created by WidgetsApp provides the overlay. '
-              'Perhaps your app content was created above the Navigator with the WidgetsApp '
-              'builder parameter.'),
+          ErrorDescription(
+            'Usually the Navigator created by WidgetsApp provides the overlay. '
+            'Perhaps your app content was created above the Navigator with the WidgetsApp '
+            'builder parameter.',
+          ),
         ]);
       }
       return true;
     }());
-    final RenderBox overlay = overlayState!.context.findRenderObject() as RenderBox;
-    final Offset buttonGlobalOffset = button.localToGlobal(Offset.zero, ancestor: overlay);
+    final RenderBox overlay =
+        overlayState!.context.findRenderObject() as RenderBox;
+    final Offset buttonGlobalOffset = button.localToGlobal(
+      Offset.zero,
+      ancestor: overlay,
+    );
     // TODO: Why do we need to ceil here?
     final Offset buttonPosition = Offset(
       buttonGlobalOffset.dx.ceilToDouble(),
       buttonGlobalOffset.dy.ceilToDouble(),
     );
-    final _PopupCalendarRoute<CalendarDate> popupCalendarRoute = _PopupCalendarRoute<CalendarDate>(
-      position: RelativeRect.fromRect(buttonPosition & button.size, Offset.zero & overlay.size),
-      initialMonth: widget.initialMonth,
-      initialYear: widget.initialYear,
-      selectedDate: selectionController.value,
-      disabledDateFilter: widget.disabledDateFilter,
-      showMenuContext: context,
-    );
-    Navigator.of(context).push<CalendarDate>(popupCalendarRoute).then((CalendarDate? date) {
+    final _PopupCalendarRoute<CalendarDate> popupCalendarRoute =
+        _PopupCalendarRoute<CalendarDate>(
+          position: RelativeRect.fromRect(
+            buttonPosition & button.size,
+            Offset.zero & overlay.size,
+          ),
+          initialMonth: widget.initialMonth,
+          initialYear: widget.initialYear,
+          selectedDate: selectionController.value,
+          disabledDateFilter: widget.disabledDateFilter,
+          showMenuContext: context,
+        );
+    Navigator.of(context).push<CalendarDate>(popupCalendarRoute).then((
+      CalendarDate? date,
+    ) {
       if (mounted) {
         setState(() {
           _pressed = false;
@@ -161,7 +169,9 @@ class _CalendarButtonState extends State<CalendarButton> {
         _selectionController = null;
       } else {
         assert(_selectionController == null);
-        oldWidget.selectionController!.removeListener(_handleSelectedDateChanged);
+        oldWidget.selectionController!.removeListener(
+          _handleSelectedDateChanged,
+        );
       }
       if (widget.selectionController == null) {
         _selectionController = CalendarSelectionController();
@@ -209,12 +219,10 @@ class _CalendarButtonState extends State<CalendarButton> {
         builder: (BuildContext context, BoxConstraints constraints) {
           Widget contentArea = Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-            child: Padding(
-              padding: EdgeInsets.only(bottom: 1),
-              child: content,
-            ),
+            child: Padding(padding: EdgeInsets.only(bottom: 1), child: content),
           );
-          if (widget.width == CalendarButtonWidth.expand && constraints.hasBoundedWidth) {
+          if (widget.width == CalendarButtonWidth.expand &&
+              constraints.hasBoundedWidth) {
             contentArea = Expanded(child: contentArea);
           }
           return Row(
@@ -264,7 +272,9 @@ class _CalendarButtonState extends State<CalendarButton> {
       );
     } else {
       result = DefaultTextStyle(
-        style: DefaultTextStyle.of(context).style.copyWith(color: const Color(0xff999999)),
+        style: DefaultTextStyle.of(
+          context,
+        ).style.copyWith(color: const Color(0xff999999)),
         child: result,
       );
     }
@@ -354,7 +364,8 @@ class _PopupCalendarRouteLayout extends SingleChildLayoutDelegate {
   }
 
   @override
-  bool shouldRelayout(_PopupCalendarRouteLayout oldDelegate) => position != oldDelegate.position;
+  bool shouldRelayout(_PopupCalendarRouteLayout oldDelegate) =>
+      position != oldDelegate.position;
 }
 
 class _PopupCalendar<T> extends StatefulWidget {
@@ -422,8 +433,14 @@ class _PopupCalendarState<T> extends State<_PopupCalendar<T>> {
                 boxShadow: [shadow],
               ),
               child: Calendar(
-                initialMonth: widget.initialMonth ?? widget.selectedDate?.month ?? today.month,
-                initialYear: widget.initialYear ?? widget.selectedDate?.year ?? today.year,
+                initialMonth:
+                    widget.initialMonth ??
+                    widget.selectedDate?.month ??
+                    today.month,
+                initialYear:
+                    widget.initialYear ??
+                    widget.selectedDate?.year ??
+                    today.year,
                 selectionController: _selectionController,
                 disabledDateFilter: widget.disabledDateFilter,
                 onDateChanged: _handleDateSelected,
@@ -480,15 +497,17 @@ class _ArrowImage {
   Size get preferredSize => const Size(7, 4);
 
   void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..style = PaintingStyle.fill
-      ..isAntiAlias = true
-      ..color = const Color(0xff000000);
-    Path arrow = Path()
-      ..fillType = PathFillType.evenOdd
-      ..moveTo(0, 0)
-      ..lineTo(size.width / 2, size.height + 0.5)
-      ..lineTo(size.width, 0);
+    Paint paint =
+        Paint()
+          ..style = PaintingStyle.fill
+          ..isAntiAlias = true
+          ..color = const Color(0xff000000);
+    Path arrow =
+        Path()
+          ..fillType = PathFillType.evenOdd
+          ..moveTo(0, 0)
+          ..lineTo(size.width / 2, size.height + 0.5)
+          ..lineTo(size.width, 0);
     arrow.close();
     canvas.drawPath(arrow, paint);
   }

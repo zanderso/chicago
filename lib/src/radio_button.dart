@@ -173,20 +173,14 @@ class BasicRadioButton extends StatelessWidget {
         child: styledTrailing,
       );
       if (!isEnabled) {
-        styledTrailing = Opacity(
-          opacity: 0.5,
-          child: styledTrailing,
-        );
+        styledTrailing = Opacity(opacity: 0.5, child: styledTrailing);
       }
     }
 
     Widget result = Row(
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        _RawRadioButton(
-          isSelected: isSelected,
-          isEnabled: isEnabled,
-        ),
+        _RawRadioButton(isSelected: isSelected, isEnabled: isEnabled),
         if (styledTrailing != null) styledTrailing,
       ],
     );
@@ -194,16 +188,11 @@ class BasicRadioButton extends StatelessWidget {
     if (isEnabled) {
       result = MouseRegion(
         cursor: SystemMouseCursors.click,
-        child: AbsorbPointer(
-          child: result,
-        ),
+        child: AbsorbPointer(child: result),
       );
 
       if (!isSelected) {
-        result = GestureDetector(
-          onTap: onSelected,
-          child: result,
-        );
+        result = GestureDetector(onTap: onSelected, child: result);
       }
     }
 
@@ -223,14 +212,14 @@ class _RawRadioButton extends LeafRenderObjectWidget {
 
   @override
   RenderObject createRenderObject(BuildContext context) {
-    return _RenderRawRadioButton(
-      isSelected: isSelected,
-      isEnabled: isEnabled,
-    );
+    return _RenderRawRadioButton(isSelected: isSelected, isEnabled: isEnabled);
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _RenderRawRadioButton renderObject) {
+  void updateRenderObject(
+    BuildContext context,
+    covariant _RenderRawRadioButton renderObject,
+  ) {
     renderObject
       ..isSelected = isSelected
       ..isEnabled = isEnabled;
@@ -238,11 +227,9 @@ class _RawRadioButton extends LeafRenderObjectWidget {
 }
 
 class _RenderRawRadioButton extends RenderBox {
-  _RenderRawRadioButton({
-    bool isSelected = false,
-    bool isEnabled = true,
-  })  : _isSelected = isSelected,
-        _isEnabled = isEnabled;
+  _RenderRawRadioButton({bool isSelected = false, bool isEnabled = true})
+    : _isSelected = isSelected,
+      _isEnabled = isEnabled;
 
   static const double _diameter = 14;
   static const double _selectionDiameter = 6;
@@ -276,7 +263,12 @@ class _RenderRawRadioButton extends RenderBox {
     final Color borderColor;
     final Color selectionColor;
     final Paint paint = Paint();
-    final Rect backgroundCircle = Rect.fromLTWH(1, 1, _diameter - 3, _diameter - 3);
+    final Rect backgroundCircle = Rect.fromLTWH(
+      1,
+      1,
+      _diameter - 3,
+      _diameter - 3,
+    );
 
     if (isEnabled) {
       paint.shader = ui.Gradient.radial(
@@ -294,11 +286,17 @@ class _RenderRawRadioButton extends RenderBox {
 
     // Center the button vertically
     context.canvas.save();
-    context.canvas.translate(offset.dx, offset.dy + (size.height - _diameter) / 2);
+    context.canvas.translate(
+      offset.dx,
+      offset.dy + (size.height - _diameter) / 2,
+    );
     try {
       // Paint the border
       final Paint borderPaint = Paint()..color = borderColor;
-      context.canvas.drawOval(Rect.fromLTWH(0, 0, _diameter - 1, _diameter - 1), borderPaint);
+      context.canvas.drawOval(
+        Rect.fromLTWH(0, 0, _diameter - 1, _diameter - 1),
+        borderPaint,
+      );
 
       // Paint the background
       context.canvas.drawOval(backgroundCircle, paint);

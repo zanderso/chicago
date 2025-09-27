@@ -43,39 +43,47 @@ void main() {
               ),
             ),
           );
-        }
+        },
       ),
     );
   }
 
-  testWidgets('If autofocus is false, widget is not focused', (WidgetTester tester) async {
+  testWidgets('If autofocus is false, widget is not focused', (
+    WidgetTester tester,
+  ) async {
     expect(tester.binding.focusManager.primaryFocus, isNull);
     await tester.pumpWidget(wrap(TextInput(autofocus: false)));
-    BuildContext focusContext = tester.binding.focusManager.primaryFocus!.context!;
+    BuildContext focusContext =
+        tester.binding.focusManager.primaryFocus!.context!;
     expect(focusContext.findAncestorWidgetOfExactType<TextInput>(), isNull);
   });
 
-  testWidgets('If autofocus is true, widget is focused', (WidgetTester tester) async {
+  testWidgets('If autofocus is true, widget is focused', (
+    WidgetTester tester,
+  ) async {
     expect(tester.binding.focusManager.primaryFocus, isNull);
     await tester.pumpWidget(wrap(TextInput(autofocus: true)));
-    BuildContext focusContext = tester.binding.focusManager.primaryFocus!.context!;
+    BuildContext focusContext =
+        tester.binding.focusManager.primaryFocus!.context!;
     expect(focusContext.findAncestorWidgetOfExactType<TextInput>(), isNotNull);
   });
 
-  testWidgets('Can render a TextInput with an onKeyEvent handler', (WidgetTester tester) async {
+  testWidgets('Can render a TextInput with an onKeyEvent handler', (
+    WidgetTester tester,
+  ) async {
     await tester.pumpWidget(wrap(TextInput(onKeyEvent: (KeyEvent event) {})));
     expect(find.byType(TextInput), findsOneWidget);
   });
 
-  testWidgets('autofocus works with onKeyEvent handler', (WidgetTester tester) async {
+  testWidgets('autofocus works with onKeyEvent handler', (
+    WidgetTester tester,
+  ) async {
     expect(tester.binding.focusManager.primaryFocus, isNull);
-    await tester.pumpWidget(wrap(
-      TextInput(
-        autofocus: true,
-        onKeyEvent: (KeyEvent event) {},
-      ),
-    ));
-    BuildContext focusContext = tester.binding.focusManager.primaryFocus!.context!;
+    await tester.pumpWidget(
+      wrap(TextInput(autofocus: true, onKeyEvent: (KeyEvent event) {})),
+    );
+    BuildContext focusContext =
+        tester.binding.focusManager.primaryFocus!.context!;
     expect(focusContext.findAncestorWidgetOfExactType<TextInput>(), isNotNull);
   });
 }

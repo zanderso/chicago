@@ -23,10 +23,7 @@ import 'foundation.dart';
 
 @immutable
 class Flag {
-  const Flag({
-    required this.messageType,
-    required this.message,
-  });
+  const Flag({required this.messageType, required this.message});
 
   final MessageType messageType;
   final String message;
@@ -34,11 +31,7 @@ class Flag {
 
 @immutable
 class FormPaneField {
-  const FormPaneField({
-    required this.label,
-    required this.child,
-    this.flag,
-  });
+  const FormPaneField({required this.label, required this.child, this.flag});
 
   final String label;
   final Widget child;
@@ -74,10 +67,10 @@ class FormPane extends StatelessWidget {
       return const _NoFlag();
     } else {
       return field.flag!.messageType.toSmallImage();
-//      return Tooltip(
-//        message: field.flag.message,
-//        child: field.flag.messageType.toSmallImage(),
-//      );
+      //      return Tooltip(
+      //        message: field.flag.message,
+      //        child: field.flag.messageType.toSmallImage(),
+      //      );
     }
   }
 
@@ -90,13 +83,15 @@ class FormPane extends StatelessWidget {
       flagImageOffset: flagImageOffset,
       stretch: stretch,
       rightAlignLabels: rightAlignLabels,
-      children: children.map<_RawFormField>((FormPaneField field) {
-        return _RawFormField(
-          label: _newLabel(field),
-          child: field.child,
-          flag: _newFlag(field),
-        );
-      }).toList(growable: false),
+      children: children
+          .map<_RawFormField>((FormPaneField field) {
+            return _RawFormField(
+              label: _newLabel(field),
+              child: field.child,
+              flag: _newFlag(field),
+            );
+          })
+          .toList(growable: false),
     );
   }
 }
@@ -146,7 +141,10 @@ class _RawForm extends RenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, covariant _RenderForm renderObject) {
+  void updateRenderObject(
+    BuildContext context,
+    covariant _RenderForm renderObject,
+  ) {
     renderObject
       ..horizontalSpacing = horizontalSpacing
       ..verticalSpacing = verticalSpacing
@@ -158,19 +156,23 @@ class _RawForm extends RenderObjectWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<double>('horizontalSpacing', horizontalSpacing));
-    properties.add(DiagnosticsProperty<double>('verticalSpacing', verticalSpacing));
-    properties.add(DiagnosticsProperty<double>('flagImageOffset', flagImageOffset));
+    properties.add(
+      DiagnosticsProperty<double>('horizontalSpacing', horizontalSpacing),
+    );
+    properties.add(
+      DiagnosticsProperty<double>('verticalSpacing', verticalSpacing),
+    );
+    properties.add(
+      DiagnosticsProperty<double>('flagImageOffset', flagImageOffset),
+    );
     properties.add(DiagnosticsProperty<bool>('stretch', stretch));
-    properties.add(DiagnosticsProperty<bool>('rightAlignLabels', rightAlignLabels));
+    properties.add(
+      DiagnosticsProperty<bool>('rightAlignLabels', rightAlignLabels),
+    );
   }
 }
 
-enum _SlotType {
-  label,
-  field,
-  flag,
-}
+enum _SlotType { label, field, flag }
 
 @immutable
 class _FormSlot {
@@ -186,7 +188,9 @@ class _FormSlot {
   @override
   bool operator ==(Object other) {
     if (other.runtimeType != runtimeType) return false;
-    return other is _FormSlot && previous == other.previous && type == other.type;
+    return other is _FormSlot &&
+        previous == other.previous &&
+        type == other.type;
   }
 
   @override
@@ -226,8 +230,16 @@ class _FormElement extends RenderObjectElement {
     _rows = List<_FormRow>.generate(widget.children.length, (int index) {
       final _RawFormField field = widget.children[index];
       _FormRow row = _FormRow();
-      row.label = updateChild(null, field.label, _FormSlot.label(previous.label));
-      row.field = updateChild(null, field.child, _FormSlot.field(previous.field));
+      row.label = updateChild(
+        null,
+        field.label,
+        _FormSlot.label(previous.label),
+      );
+      row.field = updateChild(
+        null,
+        field.child,
+        _FormSlot.field(previous.field),
+      );
       row.flag = updateChild(null, field.flag, _FormSlot.flag(previous.flag));
       previous = row;
       return row;
@@ -244,9 +256,21 @@ class _FormElement extends RenderObjectElement {
     for (_RawFormField field in newWidget.children) {
       final _FormRow row = i < _rows.length ? _rows[i] : _FormRow();
       newRows.add(row);
-      row.label = updateChild(row.label, field.label, _FormSlot.label(previous.label));
-      row.field = updateChild(row.field, field.child, _FormSlot.field(previous.field));
-      row.flag = updateChild(row.flag, field.flag, _FormSlot.flag(previous.flag));
+      row.label = updateChild(
+        row.label,
+        field.label,
+        _FormSlot.label(previous.label),
+      );
+      row.field = updateChild(
+        row.field,
+        field.child,
+        _FormSlot.field(previous.field),
+      );
+      row.flag = updateChild(
+        row.flag,
+        field.flag,
+        _FormSlot.flag(previous.flag),
+      );
       previous = row;
       i++;
     }
@@ -263,30 +287,52 @@ class _FormElement extends RenderObjectElement {
   void insertRenderObjectChild(RenderBox child, _FormSlot slot) {
     switch (slot.type) {
       case _SlotType.label:
-        renderObject.insertLabel(child, after: slot.previous?.renderObject as RenderBox?);
+        renderObject.insertLabel(
+          child,
+          after: slot.previous?.renderObject as RenderBox?,
+        );
         break;
       case _SlotType.field:
-        renderObject.insertField(child, after: slot.previous?.renderObject as RenderBox?);
+        renderObject.insertField(
+          child,
+          after: slot.previous?.renderObject as RenderBox?,
+        );
         break;
       case _SlotType.flag:
-        renderObject.insertFlag(child, after: slot.previous?.renderObject as RenderBox?);
+        renderObject.insertFlag(
+          child,
+          after: slot.previous?.renderObject as RenderBox?,
+        );
         break;
     }
   }
 
   @override
-  void moveRenderObjectChild(RenderBox child, _FormSlot oldSlot, _FormSlot newSlot) {
+  void moveRenderObjectChild(
+    RenderBox child,
+    _FormSlot oldSlot,
+    _FormSlot newSlot,
+  ) {
     assert(oldSlot.type == newSlot.type);
     assert(child.parent == renderObject);
     switch (oldSlot.type) {
       case _SlotType.label:
-        renderObject.moveLabel(child, after: newSlot.previous?.renderObject as RenderBox?);
+        renderObject.moveLabel(
+          child,
+          after: newSlot.previous?.renderObject as RenderBox?,
+        );
         break;
       case _SlotType.field:
-        renderObject.moveField(child, after: newSlot.previous?.renderObject as RenderBox?);
+        renderObject.moveField(
+          child,
+          after: newSlot.previous?.renderObject as RenderBox?,
+        );
         break;
       case _SlotType.flag:
-        renderObject.moveFlag(child, after: newSlot.previous?.renderObject as RenderBox?);
+        renderObject.moveFlag(
+          child,
+          after: newSlot.previous?.renderObject as RenderBox?,
+        );
         break;
     }
   }
@@ -321,7 +367,10 @@ class _ChildList {
   RenderBox? firstChild;
   RenderBox? lastChild;
 
-  static bool _debugUltimatePreviousSiblingOf(RenderBox child, {required RenderBox? equals}) {
+  static bool _debugUltimatePreviousSiblingOf(
+    RenderBox child, {
+    required RenderBox? equals,
+  }) {
     ContainerParentDataMixin<RenderBox> childParentData =
         child.parentData as ContainerParentDataMixin<RenderBox>;
     while (childParentData.previousSibling != null) {
@@ -332,7 +381,10 @@ class _ChildList {
     return child == equals;
   }
 
-  static bool _debugUltimateNextSiblingOf(RenderBox child, {required RenderBox? equals}) {
+  static bool _debugUltimateNextSiblingOf(
+    RenderBox child, {
+    required RenderBox? equals,
+  }) {
     ContainerParentDataMixin<RenderBox> childParentData =
         child.parentData as ContainerParentDataMixin<RenderBox>;
     while (childParentData.nextSibling != null) {
@@ -353,7 +405,8 @@ class _ChildList {
       // insert at the start (_firstChild)
       childParentData.nextSibling = firstChild;
       if (firstChild != null) {
-        final FormParentData firstChildParentData = firstChild!.parentData as FormParentData;
+        final FormParentData firstChildParentData =
+            firstChild!.parentData as FormParentData;
         firstChildParentData.previousSibling = child;
       }
       firstChild = child;
@@ -406,7 +459,8 @@ class _ChildList {
     } else {
       final FormParentData childNextSiblingParentData =
           childParentData.nextSibling!.parentData! as FormParentData;
-      childNextSiblingParentData.previousSibling = childParentData.previousSibling;
+      childNextSiblingParentData.previousSibling =
+          childParentData.previousSibling;
     }
     childParentData.previousSibling = null;
     childParentData.nextSibling = null;
@@ -414,7 +468,8 @@ class _ChildList {
   }
 }
 
-typedef FormRenderObjectVisitor = void Function(RenderBox label, RenderBox field, RenderBox flag);
+typedef FormRenderObjectVisitor =
+    void Function(RenderBox label, RenderBox field, RenderBox flag);
 
 class _RenderForm extends RenderBox {
   _RenderForm({
@@ -479,11 +534,17 @@ class _RenderForm extends RenderBox {
     _SlotType.flag: _ChildList(),
   };
 
-  void _insertChild(RenderBox child, {RenderBox? after, required _SlotType type}) {
+  void _insertChild(
+    RenderBox child, {
+    RenderBox? after,
+    required _SlotType type,
+  }) {
     final _ChildList children = _children[type]!;
     assert(child != this, 'A RenderObject cannot be inserted into itself.');
-    assert(after != this,
-        'A RenderObject cannot simultaneously be both the parent and the sibling of another RenderObject.');
+    assert(
+      after != this,
+      'A RenderObject cannot simultaneously be both the parent and the sibling of another RenderObject.',
+    );
     assert(child != after, 'A RenderObject cannot be inserted after itself.');
     assert(child != children.firstChild);
     assert(child != children.lastChild);
@@ -503,7 +564,11 @@ class _RenderForm extends RenderBox {
     _insertChild(child, after: after, type: _SlotType.flag);
   }
 
-  void _moveChild(RenderBox child, {RenderBox? after, required _SlotType type}) {
+  void _moveChild(
+    RenderBox child, {
+    RenderBox? after,
+    required _SlotType type,
+  }) {
     assert(child != this);
     assert(after != this);
     assert(child != after);
@@ -623,7 +688,8 @@ class _RenderForm extends RenderBox {
     bool isHit = false;
     visitRows((RenderBox label, RenderBox field, RenderBox flag) {
       for (RenderBox child in [field, label, flag]) {
-        final FormParentData childParentData = child.parentData as FormParentData;
+        final FormParentData childParentData =
+            child.parentData as FormParentData;
         isHit = result.addWithPaintOffset(
           offset: childParentData.offset,
           position: position,
@@ -646,7 +712,8 @@ class _RenderForm extends RenderBox {
   }
 
   @override
-  double computeMaxIntrinsicWidth(double height) => computeMinIntrinsicWidth(height);
+  double computeMaxIntrinsicWidth(double height) =>
+      computeMinIntrinsicWidth(height);
 
   @override
   double computeMinIntrinsicHeight(double width) {
@@ -654,7 +721,8 @@ class _RenderForm extends RenderBox {
   }
 
   @override
-  double computeMaxIntrinsicHeight(double width) => computeMinIntrinsicHeight(width);
+  double computeMaxIntrinsicHeight(double width) =>
+      computeMinIntrinsicHeight(width);
 
   @override
   void performLayout() {
@@ -666,10 +734,18 @@ class _RenderForm extends RenderBox {
     });
 
     BoxConstraints fieldConstraints = constraints.deflate(
-      EdgeInsets.only(left: maxLabelWidth + horizontalSpacing + flagImageOffset + _flagImageSize),
+      EdgeInsets.only(
+        left:
+            maxLabelWidth +
+            horizontalSpacing +
+            flagImageOffset +
+            _flagImageSize,
+      ),
     );
     if (stretch) {
-      fieldConstraints = fieldConstraints.tighten(width: fieldConstraints.maxWidth);
+      fieldConstraints = fieldConstraints.tighten(
+        width: fieldConstraints.maxWidth,
+      );
     } else {
       fieldConstraints = fieldConstraints.copyWith(minWidth: 0);
     }
@@ -681,15 +757,19 @@ class _RenderForm extends RenderBox {
       final FormParentData childParentData = field.parentData as FormParentData;
       final FormParentData flagParentData = flag.parentData as FormParentData;
 
-      final double labelAscent = label.getDistanceToBaseline(TextBaseline.alphabetic)!;
+      final double labelAscent =
+          label.getDistanceToBaseline(TextBaseline.alphabetic)!;
       final double labelDescent = label.size.height - labelAscent;
       field.layout(fieldConstraints, parentUsesSize: true);
-      final double fieldAscent = field.getDistanceToBaseline(TextBaseline.alphabetic)!;
+      final double fieldAscent =
+          field.getDistanceToBaseline(TextBaseline.alphabetic)!;
       final double fieldDescent = field.size.height - fieldAscent;
 
       final double baseline = math.max(labelAscent, fieldAscent);
-      final double rowHeight =
-          math.max(baseline + math.max(labelDescent, fieldDescent), _flagImageSize);
+      final double rowHeight = math.max(
+        baseline + math.max(labelDescent, fieldDescent),
+        _flagImageSize,
+      );
 
       // Align the label and field to baseline
       double labelX = rightAlignLabels ? maxLabelWidth - label.size.width : 0;
@@ -702,14 +782,21 @@ class _RenderForm extends RenderBox {
       // Vertically center the flag on the label
       flag.layout(BoxConstraints.tight(Size.square(_flagImageSize)));
       double flagY = labelY + (label.size.height - _flagImageSize) / 2;
-      flagParentData.offset = Offset(fieldX + field.size.width + flagImageOffset, flagY);
+      flagParentData.offset = Offset(
+        fieldX + field.size.width + flagImageOffset,
+        flagY,
+      );
 
       rowY += rowHeight + verticalSpacing;
       maxFieldWidth = math.max(maxFieldWidth, field.size.width);
     });
 
     size = constraints.constrainDimensions(
-      maxLabelWidth + horizontalSpacing + maxFieldWidth + flagImageOffset + _flagImageSize,
+      maxLabelWidth +
+          horizontalSpacing +
+          maxFieldWidth +
+          flagImageOffset +
+          _flagImageSize,
       rowY - verticalSpacing,
     );
   }

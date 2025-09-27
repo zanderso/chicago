@@ -19,7 +19,8 @@ import 'package:flutter/foundation.dart';
 
 typedef ListenerVisitor<T> = void Function(T listener);
 
-final class _ListenerEntry<T extends Object> extends LinkedListEntry<_ListenerEntry<T>> {
+final class _ListenerEntry<T extends Object>
+    extends LinkedListEntry<_ListenerEntry<T>> {
   _ListenerEntry(this.listener);
   final T listener;
 }
@@ -32,8 +33,8 @@ mixin ListenerNotifier<T extends Object> {
     assert(() {
       if (_debugDisposed) {
         throw FlutterError(
-            'A $runtimeType was used after being disposed.\n'
-                'Once you have called dispose() on a $runtimeType, it can no longer be used.'
+          'A $runtimeType was used after being disposed.\n'
+          'Once you have called dispose() on a $runtimeType, it can no longer be used.',
         );
       }
       return true;
@@ -66,10 +67,11 @@ mixin ListenerNotifier<T extends Object> {
   @protected
   void notifyListeners(ListenerVisitor<T> visitor) {
     assert(_debugAssertNotDisposed());
-    if (_listeners.isEmpty)
-      return;
+    if (_listeners.isEmpty) return;
 
-    final List<_ListenerEntry<T>> localListeners = List<_ListenerEntry<T>>.from(_listeners);
+    final List<_ListenerEntry<T>> localListeners = List<_ListenerEntry<T>>.from(
+      _listeners,
+    );
 
     for (final _ListenerEntry<T> entry in localListeners) {
       try {
@@ -77,19 +79,23 @@ mixin ListenerNotifier<T extends Object> {
           visitor(entry.listener);
         }
       } catch (exception, stack) {
-        FlutterError.reportError(FlutterErrorDetails(
-          exception: exception,
-          stack: stack,
-          library: 'chicago library',
-          context: ErrorDescription('while dispatching notifications for $runtimeType'),
-          informationCollector: () sync* {
-            yield DiagnosticsProperty<ListenerNotifier<T>>(
-              'The $runtimeType sending notification was',
-              this,
-              style: DiagnosticsTreeStyle.errorProperty,
-            );
-          },
-        ));
+        FlutterError.reportError(
+          FlutterErrorDetails(
+            exception: exception,
+            stack: stack,
+            library: 'chicago library',
+            context: ErrorDescription(
+              'while dispatching notifications for $runtimeType',
+            ),
+            informationCollector: () sync* {
+              yield DiagnosticsProperty<ListenerNotifier<T>>(
+                'The $runtimeType sending notification was',
+                this,
+                style: DiagnosticsTreeStyle.errorProperty,
+              );
+            },
+          ),
+        );
       }
     }
   }

@@ -56,11 +56,12 @@ class _FocusPainter extends CustomPainter {
       final Path path = Path()..addRect(rect);
       final Path dashedPath = _dashPath(path, <double>[1, 1]);
       canvas.drawPath(
-          dashedPath,
-          Paint()
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 1
-            ..color = color);
+        dashedPath,
+        Paint()
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1
+          ..color = color,
+      );
     }
   }
 
@@ -76,11 +77,7 @@ class _FocusPainter extends CustomPainter {
 /// the array `[5, 10]` would result in dashes 5 pixels long followed by blank
 /// spaces 10 pixels long.  The array `[5, 10, 5]` would result in a 5 pixel
 /// dash, a 10 pixel gap, a 5 pixel dash, a 5 pixel gap, a 10 pixel dash, etc.
-Path _dashPath(
-  Path source,
-  List<double> dash, {
-  double offset = 0.5,
-}) {
+Path _dashPath(Path source, List<double> dash, {double offset = 0.5}) {
   final Path dest = Path();
   for (final PathMetric metric in source.computeMetrics()) {
     double distance = offset;

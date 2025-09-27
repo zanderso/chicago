@@ -16,7 +16,8 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter/material.dart' show Material, MaterialType, Theme, ThemeData;
+import 'package:flutter/material.dart'
+    show Material, MaterialType, Theme, ThemeData;
 
 import 'push_button.dart';
 import 'foundation.dart';
@@ -39,20 +40,17 @@ class Sheet extends StatelessWidget {
       elevation: 4,
       child: DecoratedBox(
         decoration: const BoxDecoration(
-          border: Border.fromBorderSide(BorderSide(color: const Color(0xff999999))),
+          border: Border.fromBorderSide(
+            BorderSide(color: const Color(0xff999999)),
+          ),
         ),
         child: Padding(
           padding: const EdgeInsets.all(1),
           child: DecoratedBox(
             decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Color(0xffdedcd5)),
-              ),
+              border: Border(bottom: BorderSide(color: Color(0xffdedcd5))),
             ),
-            child: Padding(
-              padding: padding,
-              child: content,
-            ),
+            child: Padding(padding: padding, child: content),
           ),
         ),
       ),
@@ -70,10 +68,7 @@ class Sheet extends StatelessWidget {
       context: context,
       barrierDismissible: barrierDismissible,
       barrierColor: barrierColor,
-      child: Sheet(
-        padding: padding,
-        content: content,
-      ),
+      child: Sheet(padding: padding, content: content),
     );
   }
 }
@@ -108,9 +103,7 @@ class Prompt extends StatelessWidget {
           DecoratedBox(
             decoration: BoxDecoration(
               color: const Color(0xffffffff),
-              border: Border.all(
-                color: const Color(0xff999999),
-              ),
+              border: Border.all(color: const Color(0xff999999)),
             ),
             child: Padding(
               padding: EdgeInsets.all(13),
@@ -128,9 +121,7 @@ class Prompt extends StatelessWidget {
                           children: [
                             Text(
                               message,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
+                              style: Theme.of(context).textTheme.bodyMedium!
                                   .copyWith(fontWeight: FontWeight.bold),
                             ),
                             Padding(
@@ -212,51 +203,49 @@ class DialogTracker<T> {
   }) {
     final ThemeData theme = Theme.of(context);
     showGeneralDialog<T>(
-      context: context,
-      barrierDismissible: barrierDismissible,
-      barrierLabel: barrierLabel,
-      barrierColor: barrierColor,
-      pageBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-      ) {
-        return Theme(
-          data: theme,
-          child: child,
-        );
-      },
-      transitionDuration: const Duration(milliseconds: 300),
-      transitionBuilder: (
-        BuildContext context,
-        Animation<double> animation,
-        Animation<double> secondaryAnimation,
-        Widget child,
-      ) {
-        assert(_animation == null || _animation == animation);
-        if (_animation == null) {
-          _animation = animation;
-          animation.addStatusListener(_handleAnimationStatusUpdate);
-        }
-        return Align(
-          alignment: Alignment.topCenter,
-          child: SlideTransition(
-            position: Tween<Offset>(
-              begin: Offset(0, -1),
-              end: Offset.zero,
-            ).animate(CurvedAnimation(
-              parent: animation,
-              curve: Curves.easeOut,
-            )),
-            child: child,
-          ),
-        );
-      },
-    ).then((T? value) {
-      _result = _AsyncResult<T>.value(value);
-    }).catchError((dynamic error, StackTrace stack) {
-      _result = _AsyncResult<T>.error(error, stack);
-    });
+          context: context,
+          barrierDismissible: barrierDismissible,
+          barrierLabel: barrierLabel,
+          barrierColor: barrierColor,
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) {
+            return Theme(data: theme, child: child);
+          },
+          transitionDuration: const Duration(milliseconds: 300),
+          transitionBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) {
+            assert(_animation == null || _animation == animation);
+            if (_animation == null) {
+              _animation = animation;
+              animation.addStatusListener(_handleAnimationStatusUpdate);
+            }
+            return Align(
+              alignment: Alignment.topCenter,
+              child: SlideTransition(
+                position: Tween<Offset>(
+                  begin: Offset(0, -1),
+                  end: Offset.zero,
+                ).animate(
+                  CurvedAnimation(parent: animation, curve: Curves.easeOut),
+                ),
+                child: child,
+              ),
+            );
+          },
+        )
+        .then((T? value) {
+          _result = _AsyncResult<T>.value(value);
+        })
+        .catchError((dynamic error, StackTrace stack) {
+          _result = _AsyncResult<T>.error(error, stack);
+        });
     return _completer.future;
   }
 
@@ -276,11 +265,10 @@ class DialogTracker<T> {
 }
 
 class _AsyncResult<T> {
-  const _AsyncResult.value(this.value)
-      : error = null,
-        stack = null;
+  const _AsyncResult.value(this.value) : error = null, stack = null;
 
-  const _AsyncResult.error(Object this.error, StackTrace this.stack) : value = null;
+  const _AsyncResult.error(Object this.error, StackTrace this.stack)
+    : value = null;
 
   final T? value;
   final Object? error;
